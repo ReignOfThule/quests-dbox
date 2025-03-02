@@ -1,4 +1,3 @@
-require("query_helper");
 
 local spellsets = {
 	Warrior = 0, Rogue = 0, Monk = 0, Cleric = 1, Wizard = 2, Necromancer = 3, Magician = 4, Enchanter = 5, Shaman = 6,
@@ -18,17 +17,19 @@ function event_spawn(e)
 	local cityFaction = eq.get_data(cityFactionStatus);
 	local maxGuards = 29;
 
-	if (cityFaction == "hostile") then
+	if (eq.get_data(cityFactionStatus) == "hostile") then
 		e.self:SetNPCFactionID(68); --hostile
+		e.self:Shout("Setting faction to hostile");
 	else
 		e.self:SetNPCFactionID(0); --peaceful
+		e.self:Shout("Setting faction to peaceful");
 	end
 
 	if e.self:GetRace() == 71 then
 		if (cityGuild == "") then
-			--e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
+					set_base_stats(e);
 					local qeynosGuards = "qeynosGuards";
 					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
 					if eq.get_data(qeynosGuards) ~= "" then
@@ -41,6 +42,8 @@ function event_spawn(e)
 		else
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
+					local myFactionID = e.self:GetNPCFactionID();
+					e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 					set_base_stats(e);
 					--e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
 					local qeynosGuards = "qeynosGuards";
@@ -244,52 +247,134 @@ function set_base_stats(e)
 	local zone = eq.get_zone_long_name();
 	local level = eq.get_rule("Character:MaxLevel") --Guards scale with character max level
 	e.self:SetLevel(tonumber(level));
+	--e.self:ModifyNPCStat("npc_spells_id", tostring(spellsets[e.self:GetClassName()]));
+	e.self:ModifyNPCStat("aggroradius", tostring(70));
+	e.self:ModifyNPCStat("assistradius", tostring(70));	
 
-	local hp = query("SELECT hp FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local ac = query("SELECT ac FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local str = query("SELECT strength FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local sta = query("SELECT stamina FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local min_hit = query("SELECT min_dmg FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local max_hit = query("SELECT max_dmg FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local attack = query("SELECT attack FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local accuracy = query("SELECT accuracy FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local attackdelay = query("SELECT attack_delay FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local mr = query("SELECT magic_resist FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	
-	for i,hp in pairs(hp) do
-		e.self:ModifyNPCStat("max_hp", ""..hp);
-		e.self:SetHP(e.self:GetMaxHP());
+	if (level == 20) then
+		local hp = 650
+		local ac = 70
+		local str = 99
+		local sta = 99
+		local min_dmg = 10
+		local max_dmg = 46
+		local hp_regen_rate = 3
+
+		for i,hp in pairs(hp) do
+			e.self:ModifyNPCStat("hp", ""..hp);
+			e.self:SetHP(e.self:GetMaxHP());
+			e.self:Shout("Setting my hp to "..hp);
+		end
+		for i,ac in pairs(ac) do
+			e.self:ModifyNPCStat("AC", ""..ac);
+		end
+		for i,str in pairs(str) do
+			e.self:ModifyNPCStat("STR", ""..str);
+		end
+		for i,sta in pairs(sta) do
+			e.self:ModifyNPCStat("STA", ""..sta);
+		end
+		for i,min_dmg in pairs(min_dmg) do
+			e.self:ModifyNPCStat("mindmg", ""..min_hit);
+		end
+		for i,max_dmg in pairs(max_dmg) do
+			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
+		end
+		for i,hp_regen_rate in pairs(hp_regen_rate) do
+			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
+		end
+	elseif (level == 30) then
+		local hp = 1650
+		local ac = 120
+		local str = 120
+		local sta = 120
+		local min_dmg = 15
+		local max_dmg = 70
+		local hp_regen_rate = 4
+
+		for i,hp in pairs(hp) do
+			e.self:ModifyNPCStat("hp", ""..hp);
+			e.self:SetHP(e.self:GetMaxHP());
+		end
+		for i,ac in pairs(ac) do
+			e.self:ModifyNPCStat("AC", ""..ac);
+		end
+		for i,str in pairs(str) do
+			e.self:ModifyNPCStat("STR", ""..str);
+		end
+		for i,sta in pairs(sta) do
+			e.self:ModifyNPCStat("STA", ""..sta);
+		end
+		for i,min_dmg in pairs(min_dmg) do
+			e.self:ModifyNPCStat("mindmg", ""..min_hit);
+		end
+		for i,max_dmg in pairs(max_dmg) do
+			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
+		end
+		for i,hp_regen_rate in pairs(hp_regen_rate) do
+			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
+		end
+	elseif (level == 40) then
+		local hp = 3250
+		local ac = 150
+		local str = 135
+		local sta = 135
+		local min_dmg = 25
+		local max_dmg = 101
+		local hp_regen_rate = 5
+
+		for i,hp in pairs(hp) do
+			e.self:ModifyNPCStat("hp", ""..hp);
+			e.self:SetHP(e.self:GetMaxHP());
+		end
+		for i,ac in pairs(ac) do
+			e.self:ModifyNPCStat("AC", ""..ac);
+		end
+		for i,str in pairs(str) do
+			e.self:ModifyNPCStat("STR", ""..str);
+		end
+		for i,sta in pairs(sta) do
+			e.self:ModifyNPCStat("STA", ""..sta);
+		end
+		for i,min_dmg in pairs(min_dmg) do
+			e.self:ModifyNPCStat("mindmg", ""..min_hit);
+		end
+		for i,max_dmg in pairs(max_dmg) do
+			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
+		end
+		for i,hp_regen_rate in pairs(hp_regen_rate) do
+			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
+		end
+	elseif (level == 50) then
+		local hp = 15120
+		local ac = 190
+		local str = 191
+		local sta = 191
+		local min_dmg = 61
+		local max_dmg = 175
+		local hp_regen_rate = 6
+
+		for i,hp in pairs(hp) do
+			e.self:ModifyNPCStat("hp", ""..hp);
+			e.self:SetHP(e.self:GetMaxHP());
+		end
+		for i,ac in pairs(ac) do
+			e.self:ModifyNPCStat("AC", ""..ac);
+		end
+		for i,str in pairs(str) do
+			e.self:ModifyNPCStat("STR", ""..str);
+		end
+		for i,sta in pairs(sta) do
+			e.self:ModifyNPCStat("STA", ""..sta);
+		end
+		for i,min_dmg in pairs(min_dmg) do
+			e.self:ModifyNPCStat("mindmg", ""..min_hit);
+		end
+		for i,max_dmg in pairs(max_dmg) do
+			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
+		end
+		for i,hp_regen_rate in pairs(hp_regen_rate) do
+			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
+		end		
 	end
-	for i,ac in pairs(ac) do
-		e.self:ModifyNPCStat("AC", ""..ac);
-	end
-	for i,str in pairs(str) do
-		e.self:ModifyNPCStat("STR", ""..str);
-	end
-	for i,sta in pairs(sta) do
-		e.self:ModifyNPCStat("STA", ""..sta);
-	end
-	for i,min_hit in pairs(min_hit) do
-		e.self:ModifyNPCStat("min_hit", ""..min_hit);
-	end
-	for i,max_hit in pairs(max_hit) do
-		e.self:ModifyNPCStat("max_hit", ""..max_hit);
-	end
-	for i,attack in pairs(attack) do
-		e.self:ModifyNPCStat("ATK", ""..attack * 6);
-	end
-	for i,accuracy in pairs(accuracy) do
-		e.self:ModifyNPCStat("accuracy", ""..accuracy);
-	end
-	for i,attackdelay in pairs(attackdelay) do
-		e.self:ModifyNPCStat("attack_delay", ""..attackdelay);
-	end
-	for i,mr in pairs(mr) do
-		e.self:ModifyNPCStat("MR", ""..mr);
-	end
-	--defaults
-	e.self:ModifyNPCStat("npc_spells_id", tostring(spellsets[e.self:GetClassName()]));
-	-- I dont think these work :(
-	--e.self:ModifyNPCStat("AggroRange", tostring(70));
-	--e.self:ModifyNPCStat("AssistRange", tostring(70));
 end

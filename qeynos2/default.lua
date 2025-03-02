@@ -1,4 +1,3 @@
-require("query_helper");
 
 local spellsets = {
 	Warrior = 0, Rogue = 0, Monk = 0, Cleric = 1, Wizard = 2, Necromancer = 3, Magician = 4, Enchanter = 5, Shaman = 6,
@@ -18,17 +17,12 @@ function event_spawn(e)
 	local cityFaction = eq.get_data(cityFactionStatus);
 	local maxGuards = 29;
 
-	if (cityFaction == "hostile") then
-		e.self:SetNPCFactionID(68); --hostile
-	else
-		e.self:SetNPCFactionID(0); --peaceful
-	end
 
 	if e.self:GetRace() == 71 then
 		if (cityGuild == "") then
-			--e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
+					--set_base_stats(e);
 					local qeynosGuards = "qeynosGuards";
 					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
 					if eq.get_data(qeynosGuards) ~= "" then
@@ -41,7 +35,8 @@ function event_spawn(e)
 		else
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
-					set_base_stats(e);
+					e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+					--set_base_stats(e);
 					--e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
 					local qeynosGuards = "qeynosGuards";
 					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
