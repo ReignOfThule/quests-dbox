@@ -1,9 +1,4 @@
 
-local spellsets = {
-	Warrior = 0, Rogue = 0, Monk = 0, Cleric = 1, Wizard = 2, Necromancer = 3, Magician = 4, Enchanter = 5, Shaman = 6,
-	Druid = 7, Paladin = 8, ShadowKnight = 9, Ranger = 10, Bard = 11, Beastlord = 12
-}
-
 
 function event_spawn(e)
 	eq.set_proximity(e.self:GetX() - 15, e.self:GetX() + 15, e.self:GetY() - 15, e.self:GetY() + 15, e.self:GetZ() -5, e.self:GetZ() +5);
@@ -17,15 +12,13 @@ function event_spawn(e)
 	local cityFaction = eq.get_data(cityFactionStatus);
 	local maxGuards = 29;
 
-	if (eq.get_data(cityFactionStatus) == "hostile") then
-		e.self:SetNPCFactionID(68); --hostile
-		e.self:Shout("Setting faction to hostile");
-	else
+	if e.self:GetRace() ~= 71 then
 		e.self:SetNPCFactionID(0); --peaceful
-		e.self:Shout("Setting faction to peaceful");
-	end
+		if (cityGuild ~= "") then
+			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+		end
 
-	if e.self:GetRace() == 71 then
+	elseif e.self:GetRace() == 71 then
 		if (cityGuild == "") then
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
@@ -40,17 +33,37 @@ function event_spawn(e)
 				end
 			end
 		else
-			if e.self:GetTexture() == 1 then 
-				if e.self:GetClass() ~= 41 then
-					local myFactionID = e.self:GetNPCFactionID();
-					e.self:SetGuild(tonumber(cityGuild)); --set guild to player
-					set_base_stats(e);
-					--e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
-					local qeynosGuards = "qeynosGuards";
-					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
-					if eq.get_data(qeynosGuards) ~= "" then
-						if qeynosGuardsQuantity < maxGuards then
-							eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+			if (eq.get_data(cityFactionStatus) == "hostile") then
+				e.self:SetNPCFactionID(68); --hostile
+				if e.self:GetTexture() == 1 then 
+					if e.self:GetClass() ~= 41 then
+						local myFactionID = e.self:GetNPCFactionID();
+						set_base_stats(e);
+						e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+						local qeynosGuards = "qeynosGuards";
+						local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
+						if eq.get_data(qeynosGuards) ~= "" then
+							if qeynosGuardsQuantity < maxGuards then
+								eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+							end
+						end
+					end
+				end
+			else
+				e.self:SetNPCFactionID(0); --peaceful
+				e.self:Shout(npcName)
+				if e.self:GetTexture() == 1 then 
+					if e.self:GetClass() ~= 41 then
+						local myFactionID = e.self:GetNPCFactionID();
+						set_base_stats(e);
+						e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+						local qeynosGuards = "qeynosGuards";
+						local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
+						if eq.get_data(qeynosGuards) ~= "" then
+							if qeynosGuardsQuantity < maxGuards then
+								eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+							end
 						end
 					end
 				end
@@ -111,8 +124,9 @@ function event_say(e)
 				local cityBankAmount = eq.get_data(cityBank);
 				local cityBankCollect = "qeynosBankCollectTimer";
 				local cityBankCollectTimer = eq.get_data(cityBankCollect);
-
-
+				local cityRepop = "qeynosRepop";
+				local cityRepopSecond = "qeynos2Repop";
+			
 				if (cityGuild == tostring(guild_id)) then --if databucket matches guild id
 					if char_guild_rank == 2 then --if leader of guild
 						if(e.message:findi("hail")) then
@@ -131,19 +145,25 @@ function event_say(e)
 								local cityFactionStatus = "qeynosFaction";
 								if eq.get_data(cityFactionStatus) ~= "" then
 									eq.set_data(cityFactionStatus, "hostile");
+									eq.signal(12, 1); --set cooldown signal of 1 hour
 									local guardsBucketKey = "qeynosGuards";
 									local qeynosGuards = eq.get_data(guardsBucketKey);
 									if qeynosGuards ~= "" then
 										eq.set_data(guardsBucketKey, "0"); --reset guard count to 0
 										eq.set_data(cityReset, "1");
-										--eq.cross_zone_signal_npc_by_npctype_id(450002, 7); --cooldown signal to courier in CSHOME
-										--eq.set_timer("repopCooldownHostile", 1000); --1 second cooldown to make sure guardsBucketKey is set to 0 before repops
+										if eq.get_data(cityRepop) == "no" then
+											eq.set_data(cityRepop, "yes"); --Set databucket to repop
+										end
+										if eq.get_data(cityRepopSecond) == "no" then
+											eq.set_data(cityRepopSecond, "yes")
+										end
 										e.self:Say("Right away sir! Sending word sir!");
 									end
 								end				
 							elseif(e.message:findi("peaceful")) then
 								if eq.get_data(cityFactionStatus) ~= "" then
 									eq.set_data(cityFactionStatus, "peaceful");
+									eq.signal(12, 1); --set cooldown signal of 1 hour
 									local guardsBucketKey = "qeynosGuards";
 									local qeynosGuards = eq.get_data(guardsBucketKey);
 									if qeynosGuards ~= "" then
@@ -190,21 +210,34 @@ function repop_guards_in_zone_peaceful()
 end
 
 function try_collect_from_vault(e)
-	local cityBank = "qeynosBank";
-	local cityBankAmount = eq.get_data(cityBank);
-	local cityBankCollect = "qeynosBankCollectTimer";
-	local cityBankCollectTimer = eq.get_data(cityBankCollect);
+    local cityBank = "qeynosBank"
+    local cityBankAmount = eq.get_data(cityBank)
+    local cityBankCollect = "qeynosBankCollectTimer"
+    local cityBankCollectTimer = eq.get_data(cityBankCollect)
 
-	if cityBankCollectTimer ~= "" then
-		local pattern = "(%a+) (%a+) (%d+) (%d+):(%d+):(%d+) (%d+)"
-        local _, month, day, hour, min, sec, year = cityBankCollectTimer:match(pattern)
+    -- Check if the collection timer exists
+    if cityBankCollectTimer ~= "" then
+        -- Adjust the pattern to match the format: "Tue Mar  4 22:24:40 2025"
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityBankCollectTimer:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
+
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed cityBankCollectTimer data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
         
         -- Convert month name to number
         local months = {
             Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
             Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
         }
-        
+
+        -- Build the timeTable
         local timeTable = {
             year = tonumber(year),
             month = months[month],
@@ -213,168 +246,146 @@ function try_collect_from_vault(e)
             min = tonumber(min),
             sec = tonumber(sec)
         }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
         local unixTimestamp = os.time(timeTable)
 
+        -- Get the current Unix timestamp
         local now = os.time()
 
-        local difference = now - unixTimestamp 
+        -- Calculate the difference in seconds between now and the stored time
+        local difference = now - unixTimestamp
 
-        local dayspassed = difference / 86400 --every day passed
-        if dayspassed >= 3 then
-			if cityBankAmount ~= "" then
-				e.self:Say("Sir, the bank currently has: " ..cityBankAmount .." platinum. Here you are!");
-				e.other:QuestReward(e.self,0,0,0,tonumber(cityBankAmount))
-				eq.set_data(cityBank, tostring(0));
-				eq.set_data(cityBankCollect, os.date("%c"));
+        -- Calculate the number of days passed
+        local daysPassed = difference / 86400  -- Convert seconds to days
 
-			end
-		else
-			e.self:Say("Apologies sir, the master of coin is out... The next time the vault can be collected from is in: " ..tostring(math.floor(3 - tonumber(dayspassed))).." days.");
-		end
-	else
+        -- Debugging: Print the number of days passed
+        print("Days passed: ", daysPassed)
 
-		if cityBankAmount ~= "" then
-			e.self:Say("Sir, the bank currently has: " ..cityBankAmount .." platinum. Here you are!");
-			e.other:QuestReward(e.self,0,0,0,tonumber(cityBankAmount))
-			eq.set_data(cityBank, tostring(0));
-			eq.set_data(cityBankCollect, os.date("%c"));
-		end
-	end
+        -- Check if 3 or more days have passed
+        if daysPassed >= 3 then
+            -- If there's money in the city bank, give it to the player
+            if cityBankAmount ~= "" then
+                e.self:Say("Sir, the bank currently has: " .. cityBankAmount .. " platinum. Here you are!")
+                e.other:QuestReward(e.self, 0, 0, 0, tonumber(cityBankAmount))
+                eq.set_data(cityBank, tostring(0))
+                eq.set_data(cityBankCollect, os.date("%c"))
+            end
+        else
+            -- If less than 3 days have passed, tell the player when the vault can be collected from again
+            e.self:Say("Apologies sir, the master of coin is out... The next time the vault can be collected from is in: " .. tostring(math.floor(3 - daysPassed)) .. " days.")
+        end
+    else
+        -- If the collection timer doesn't exist, process the bank amount
+        if cityBankAmount ~= "" then
+            e.self:Say("Sir, the bank currently has: " .. cityBankAmount .. " platinum. Here you are!")
+            e.other:QuestReward(e.self, 0, 0, 0, tonumber(cityBankAmount))
+            eq.set_data(cityBank, tostring(0))
+            eq.set_data(cityBankCollect, os.date("%c"))
+        end
+    end
 end
+
 
 function set_base_stats(e)
 
 	local zone = eq.get_zone_long_name();
 	local level = eq.get_rule("Character:MaxLevel") --Guards scale with character max level
-	e.self:SetLevel(tonumber(level));
-	--e.self:ModifyNPCStat("npc_spells_id", tostring(spellsets[e.self:GetClassName()]));
-	e.self:ModifyNPCStat("aggroradius", tostring(70));
-	e.self:ModifyNPCStat("assistradius", tostring(70));	
+	local levelAdjustment = tonumber(level) + 5;
+	local npcClass = e.self:GetClass();
+	
+	e.self:SetLevel(tonumber(levelAdjustment)); --Add +5 to max level		
 
-	if (level == 20) then
-		local hp = 650
-		local ac = 70
-		local str = 99
-		local sta = 99
-		local min_dmg = 10
-		local max_dmg = 46
-		local hp_regen_rate = 3
-
-		for i,hp in pairs(hp) do
-			e.self:ModifyNPCStat("hp", ""..hp);
-			e.self:SetHP(e.self:GetMaxHP());
-			e.self:Shout("Setting my hp to "..hp);
-		end
-		for i,ac in pairs(ac) do
-			e.self:ModifyNPCStat("AC", ""..ac);
-		end
-		for i,str in pairs(str) do
-			e.self:ModifyNPCStat("STR", ""..str);
-		end
-		for i,sta in pairs(sta) do
-			e.self:ModifyNPCStat("STA", ""..sta);
-		end
-		for i,min_dmg in pairs(min_dmg) do
-			e.self:ModifyNPCStat("mindmg", ""..min_hit);
-		end
-		for i,max_dmg in pairs(max_dmg) do
-			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
-		end
-		for i,hp_regen_rate in pairs(hp_regen_rate) do
-			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
-		end
-	elseif (level == 30) then
-		local hp = 1650
-		local ac = 120
-		local str = 120
-		local sta = 120
-		local min_dmg = 15
-		local max_dmg = 70
-		local hp_regen_rate = 4
-
-		for i,hp in pairs(hp) do
-			e.self:ModifyNPCStat("hp", ""..hp);
-			e.self:SetHP(e.self:GetMaxHP());
-		end
-		for i,ac in pairs(ac) do
-			e.self:ModifyNPCStat("AC", ""..ac);
-		end
-		for i,str in pairs(str) do
-			e.self:ModifyNPCStat("STR", ""..str);
-		end
-		for i,sta in pairs(sta) do
-			e.self:ModifyNPCStat("STA", ""..sta);
-		end
-		for i,min_dmg in pairs(min_dmg) do
-			e.self:ModifyNPCStat("mindmg", ""..min_hit);
-		end
-		for i,max_dmg in pairs(max_dmg) do
-			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
-		end
-		for i,hp_regen_rate in pairs(hp_regen_rate) do
-			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
-		end
-	elseif (level == 40) then
-		local hp = 3250
-		local ac = 150
-		local str = 135
-		local sta = 135
-		local min_dmg = 25
-		local max_dmg = 101
-		local hp_regen_rate = 5
-
-		for i,hp in pairs(hp) do
-			e.self:ModifyNPCStat("hp", ""..hp);
-			e.self:SetHP(e.self:GetMaxHP());
-		end
-		for i,ac in pairs(ac) do
-			e.self:ModifyNPCStat("AC", ""..ac);
-		end
-		for i,str in pairs(str) do
-			e.self:ModifyNPCStat("STR", ""..str);
-		end
-		for i,sta in pairs(sta) do
-			e.self:ModifyNPCStat("STA", ""..sta);
-		end
-		for i,min_dmg in pairs(min_dmg) do
-			e.self:ModifyNPCStat("mindmg", ""..min_hit);
-		end
-		for i,max_dmg in pairs(max_dmg) do
-			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
-		end
-		for i,hp_regen_rate in pairs(hp_regen_rate) do
-			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
-		end
-	elseif (level == 50) then
-		local hp = 15120
-		local ac = 190
-		local str = 191
-		local sta = 191
-		local min_dmg = 61
-		local max_dmg = 175
-		local hp_regen_rate = 6
-
-		for i,hp in pairs(hp) do
-			e.self:ModifyNPCStat("hp", ""..hp);
-			e.self:SetHP(e.self:GetMaxHP());
-		end
-		for i,ac in pairs(ac) do
-			e.self:ModifyNPCStat("AC", ""..ac);
-		end
-		for i,str in pairs(str) do
-			e.self:ModifyNPCStat("STR", ""..str);
-		end
-		for i,sta in pairs(sta) do
-			e.self:ModifyNPCStat("STA", ""..sta);
-		end
-		for i,min_dmg in pairs(min_dmg) do
-			e.self:ModifyNPCStat("mindmg", ""..min_hit);
-		end
-		for i,max_dmg in pairs(max_dmg) do
-			e.self:ModifyNPCStat("maxdmg", ""..max_hit);
-		end
-		for i,hp_regen_rate in pairs(hp_regen_rate) do
-			e.self:ModifyNPCStat("combat_hp_regen", ""..hp_regen_rate);
-		end		
+	if (level == "20") then
+		local hp = "1150"; --+500 from normal
+		local ac = "70";
+		local str = "99";
+		local sta = "99";
+		local min_hit = "20"; --+10 from normal
+		local max_hit = "46";
+		local hp_regen = "3";
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "30") then
+		local hp = "2650" --+1000 from normal
+		local ac = "120"
+		local str = "120"
+		local sta = "120"
+		local min_dmg = "35" --+20 from normal
+		local max_dmg = "70"
+		local hp_regen = "4"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "40") then
+		local hp = "5250" --+2000 from normal
+		local ac = "150"
+		local str = "135"
+		local sta = "135"
+		local min_dmg = "55" --+30 from normal
+		local max_dmg = "101"
+		local hp_regen = "5"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "50") then
+		local hp = "20120" --+5000 from normal
+		local ac = "190"
+		local str = "191"
+		local sta = "191"
+		local min_dmg = "101" --+40 from normal
+		local max_dmg = "175"
+		local hp_regen = "6"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
 	end
 end

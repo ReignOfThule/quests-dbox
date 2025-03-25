@@ -20,6 +20,18 @@ function event_timer(e)
         else
             eq.set_timer("cityCheckA", 5000); --5 seconds
         end
+    elseif (e.timer == "resetAlert") then
+        local cityReset = "qeynosReset";
+        local cityResetTimer = eq.get_data(cityReset)
+        if cityResetTimer == "1" then
+            eq.set_data(cityReset, "0");
+        end
+    end
+end
+
+function event_signal(e)
+    if e.signal == 1 then
+        eq.set_timer("resetAlert", 3600000); -- 1 hour
     end
 end
 

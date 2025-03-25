@@ -14,6 +14,8 @@ function event_say(e)
 			if corpseCount > 0 then
 				eq.summon_all_player_corpses(charID,x,y,z,h);
 				eq.set_data(tostring(charID), "time remaining", "30m");
+			else
+				e.self:Say("You don't have any corpses at this time");
 			end
 		else
 			e.self:Say("Get your own corpse!");
