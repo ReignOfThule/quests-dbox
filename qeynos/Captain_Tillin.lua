@@ -74,3 +74,7 @@ function event_trade(e)
 end
 
 -- END of FILE Zone:qeynos  ID:1077 -- Captain_Tillin
+
+function event_spawn(e)
+	e.self:SetNPCFactionID(0); --peaceful
+end

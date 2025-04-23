@@ -1,9 +1,4 @@
 
-local spellsets = {
-	Warrior = 0, Rogue = 0, Monk = 0, Cleric = 1, Wizard = 2, Necromancer = 3, Magician = 4, Enchanter = 5, Shaman = 6,
-	Druid = 7, Paladin = 8, ShadowKnight = 9, Ranger = 10, Bard = 11, Beastlord = 12
-}
-
 
 function event_spawn(e)
 	eq.set_proximity(e.self:GetX() - 15, e.self:GetX() + 15, e.self:GetY() - 15, e.self:GetY() + 15, e.self:GetZ() -5, e.self:GetZ() +5);
@@ -15,14 +10,23 @@ function event_spawn(e)
 	local cityGuild = eq.get_data(cityOwnership);
 	local cityGuildName = eq.get_data(cityOwnershipName);
 	local cityFaction = eq.get_data(cityFactionStatus);
-	local maxGuards = 29;
+	local maxGuards = 27;
 
+	if e.self:GetRace() ~= 71 then
+		if e.self:GetRace() ~= 60 then
+			if e.self:GetRace() ~= 39 then
+				e.self:SetNPCFactionID(0); --peaceful
+				if (cityGuild ~= "") then
+					e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+				end
+			end
+		end
 
-	if e.self:GetRace() == 71 then
+	elseif e.self:GetRace() == 71 then
 		if (cityGuild == "") then
 			if e.self:GetTexture() == 1 then 
 				if e.self:GetClass() ~= 41 then
-					--set_base_stats(e);
+					set_base_stats(e);
 					local qeynosGuards = "qeynosGuards";
 					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
 					if eq.get_data(qeynosGuards) ~= "" then
@@ -33,16 +37,36 @@ function event_spawn(e)
 				end
 			end
 		else
-			if e.self:GetTexture() == 1 then 
-				if e.self:GetClass() ~= 41 then
-					e.self:SetGuild(tonumber(cityGuild)); --set guild to player
-					--set_base_stats(e);
-					--e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
-					local qeynosGuards = "qeynosGuards";
-					local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
-					if eq.get_data(qeynosGuards) ~= "" then
-						if qeynosGuardsQuantity < maxGuards then
-							eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+			if (eq.get_data(cityFactionStatus) == "hostile") then
+				e.self:SetNPCFactionID(68); --hostile
+				if e.self:GetTexture() == 1 then 
+					if e.self:GetClass() ~= 41 then
+						local myFactionID = e.self:GetNPCFactionID();
+						set_base_stats(e);
+						e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+						local qeynosGuards = "qeynosGuards";
+						local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
+						if eq.get_data(qeynosGuards) ~= "" then
+							if qeynosGuardsQuantity < maxGuards then
+								eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+							end
+						end
+					end
+				end
+			else
+				e.self:SetNPCFactionID(0); --peaceful
+				if e.self:GetTexture() == 1 then 
+					if e.self:GetClass() ~= 41 then
+						local myFactionID = e.self:GetNPCFactionID();
+						set_base_stats(e);
+						e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+						local qeynosGuards = "qeynosGuards";
+						local qeynosGuardsQuantity = tonumber(eq.get_data(qeynosGuards));
+						if eq.get_data(qeynosGuards) ~= "" then
+							if qeynosGuardsQuantity < maxGuards then
+								eq.set_data(qeynosGuards, tostring(qeynosGuardsQuantity + 1));
+							end
 						end
 					end
 				end
@@ -55,7 +79,7 @@ function event_death_complete(e)
     if e.self:GetRace() == 71 then
         if e.self:GetTexture() == 1 then 
             if e.self:GetClass() ~= 41 then
-                eq.signal(11, e.killer:GetID());
+                eq.signal(12, e.killer:GetID());
             end
         end
     end
@@ -103,8 +127,9 @@ function event_say(e)
 				local cityBankAmount = eq.get_data(cityBank);
 				local cityBankCollect = "qeynosBankCollectTimer";
 				local cityBankCollectTimer = eq.get_data(cityBankCollect);
-
-
+				local cityRepop = "qeynosRepop";
+				local cityRepopSecond = "qeynos2Repop";
+			
 				if (cityGuild == tostring(guild_id)) then --if databucket matches guild id
 					if char_guild_rank == 2 then --if leader of guild
 						if(e.message:findi("hail")) then
@@ -115,42 +140,12 @@ function event_say(e)
 							end
 						elseif(e.message:findi("collect from vault")) then
 							try_collect_from_vault(e)
-						end
-						if eq.get_data(cityReset) == "0" then --city reset timer cooldown to prevent chain resetting guards from defending guild. Once an hour reset.
-							if(e.message:findi("alert")) then
-								e.self:Say("On your orders we can be ["..eq.say_link("hostile").. "] or ["..eq.say_link("peaceful").. "] to all whom enter Qeynos");
-							elseif(e.message:findi("hostile")) then
-								local cityFactionStatus = "qeynosFaction";
-								if eq.get_data(cityFactionStatus) ~= "" then
-									eq.set_data(cityFactionStatus, "hostile");
-									local guardsBucketKey = "qeynosGuards";
-									local qeynosGuards = eq.get_data(guardsBucketKey);
-									if qeynosGuards ~= "" then
-										eq.set_data(guardsBucketKey, "0"); --reset guard count to 0
-										eq.set_data(cityReset, "1");
-										--eq.cross_zone_signal_npc_by_npctype_id(450002, 7); --cooldown signal to courier in CSHOME
-										--eq.set_timer("repopCooldownHostile", 1000); --1 second cooldown to make sure guardsBucketKey is set to 0 before repops
-										e.self:Say("Right away sir! Sending word sir!");
-									end
-								end				
-							elseif(e.message:findi("peaceful")) then
-								if eq.get_data(cityFactionStatus) ~= "" then
-									eq.set_data(cityFactionStatus, "peaceful");
-									local guardsBucketKey = "qeynosGuards";
-									local qeynosGuards = eq.get_data(guardsBucketKey);
-									if qeynosGuards ~= "" then
-										eq.set_data(guardsBucketKey, "0"); --reset guard count to 0
-										eq.set_data(cityReset, "1");
-										--eq.cross_zone_signal_npc_by_npctype_id(450002, 7); --cooldown signal to courier in CSHOME
-										--eq.set_timer("repopCooldownPeaceful", 1000); --1 second cooldown to make sure guardsBucketKey is set to 0 before repops
-										e.self:Say("Right away sir! Sending word sir!");
-									end
-								end
-							end
-						else
-							if(e.message:findi("alert")) then
-								e.self:Say("My apologies sir. I've already sent new orders to the guard. I can send additional word within the hour");
-							end
+						elseif(e.message:findi("alert")) then
+							e.self:Say("On your orders we can be ["..eq.say_link("hostile").. "] or ["..eq.say_link("peaceful").. "] to all whom enter Qeynos");
+						elseif(e.message:findi("hostile")) then
+							reset_guard_hostile(e)			
+						elseif(e.message:findi("peaceful")) then
+							reset_guard_peaceful(e)
 						end
 					end
 				end
@@ -160,43 +155,35 @@ function event_say(e)
 end
 
 
-function event_timer(e)
-	if (e.timer == "repopCooldownHostile") then
-		eq.stop_timer("repopCooldownHostile");
-		repop_guards_in_zone_hostile();
-	elseif (e.timer == "repopCooldownPeaceful") then
-		eq.stop_timer("repopCooldownPeaceful");
-		repop_guards_in_zone_peaceful();
-	end
-end
-
-
-function repop_guards_in_zone_hostile()
-	eq.signal(450001, 2); --signal of war to the Qeynos Courier (South Qeynos) - 450001
-	eq.cross_zone_signal_npc_by_npctype_id(450000, 2); --signal of war to Qeynos Courier (North Qeynos) - 450000
-end
-
-function repop_guards_in_zone_peaceful()
-	eq.signal(450001, 3); --signal of peace to the Qeynos Courier (South Qeynos) - 450001
-	eq.cross_zone_signal_npc_by_npctype_id(450000, 3); --signal of peace to Qeynos Courier (North Qeynos) - 450000
-end
-
 function try_collect_from_vault(e)
-	local cityBank = "qeynosBank";
-	local cityBankAmount = eq.get_data(cityBank);
-	local cityBankCollect = "qeynosBankCollectTimer";
-	local cityBankCollectTimer = eq.get_data(cityBankCollect);
+    local cityBank = "qeynosBank"
+    local cityBankAmount = eq.get_data(cityBank)
+    local cityBankCollect = "qeynosBankCollectTimer"
+    local cityBankCollectTimer = eq.get_data(cityBankCollect)
 
-	if cityBankCollectTimer ~= "" then
-		local pattern = "(%a+) (%a+) (%d+) (%d+):(%d+):(%d+) (%d+)"
-        local _, month, day, hour, min, sec, year = cityBankCollectTimer:match(pattern)
+    -- Check if the collection timer exists
+    if cityBankCollectTimer ~= "" then
+        -- Adjust the pattern to match the format: "Tue Mar  4 22:24:40 2025"
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityBankCollectTimer:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
+
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed cityBankCollectTimer data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
         
         -- Convert month name to number
         local months = {
             Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
             Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
         }
-        
+
+        -- Build the timeTable
         local timeTable = {
             year = tonumber(year),
             month = months[month],
@@ -205,32 +192,277 @@ function try_collect_from_vault(e)
             min = tonumber(min),
             sec = tonumber(sec)
         }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
         local unixTimestamp = os.time(timeTable)
 
+        -- Get the current Unix timestamp
         local now = os.time()
 
-        local difference = now - unixTimestamp 
+        -- Calculate the difference in seconds between now and the stored time
+        local difference = now - unixTimestamp
 
-        local dayspassed = difference / 86400 --every day passed
-        if dayspassed >= 3 then
-			if cityBankAmount ~= "" then
-				e.self:Say("Sir, the bank currently has: " ..cityBankAmount .." platinum. Here you are!");
-				e.other:QuestReward(e.self,0,0,0,tonumber(cityBankAmount))
-				eq.set_data(cityBank, tostring(0));
-				eq.set_data(cityBankCollect, os.date("%c"));
+        -- Calculate the number of days passed
+        local daysPassed = difference / 86400  -- Convert seconds to days
 
+        -- Debugging: Print the number of days passed
+        print("Days passed: ", daysPassed)
+
+        -- Check if 3 or more days have passed
+        if daysPassed >= 3 then
+            -- If there's money in the city bank, give it to the player
+            if cityBankAmount ~= "" then
+                e.self:Say("Sir, the bank currently has: " .. cityBankAmount .. " platinum. Here you are!")
+                e.other:QuestReward(e.self, 0, 0, 0, tonumber(cityBankAmount))
+                eq.set_data(cityBank, tostring(0))
+                eq.set_data(cityBankCollect, os.date("%c"))
+            end
+        else
+            -- If less than 3 days have passed, tell the player when the vault can be collected from again
+            e.self:Say("Apologies sir, the master of coin is out... The next time the vault can be collected from is in: " .. tostring(math.floor(3 - daysPassed)) .. " days.")
+        end
+    else
+        -- If the collection timer doesn't exist, process the bank amount
+        if cityBankAmount ~= "" then
+            e.self:Say("Sir, the bank currently has: " .. cityBankAmount .. " platinum. Here you are!")
+            e.other:QuestReward(e.self, 0, 0, 0, tonumber(cityBankAmount))
+            eq.set_data(cityBank, tostring(0))
+            eq.set_data(cityBankCollect, os.date("%c"))
+        end
+    end
+end
+
+
+function reset_guard_hostile(e)
+	local cityRepop = "qeynosRepop";
+	local cityRepopSecond = "qeynos2Repop";
+    local cityStatus = "qeynosReset"
+    local cityCurrentStatus = eq.get_data(cityStatus)
+
+    -- Check if the collection timer exists
+    if cityCurrentStatus ~= "" then
+        -- Adjust the pattern to match the format: "Tue Mar  4 22:24:40 2025"
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityCurrentStatus:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
+
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed city Timer data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
+        
+        -- Convert month name to number
+        local months = {
+            Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
+            Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
+        }
+
+        -- Build the timeTable
+        local timeTable = {
+            year = tonumber(year),
+            month = months[month],
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec)
+        }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
+        local unixTimestamp = os.time(timeTable)
+
+        -- Get the current Unix timestamp
+        local now = os.time()
+
+        -- Calculate the difference in seconds between now and the stored time
+        local difference = now - unixTimestamp
+
+        -- Calculate the number of days passed
+        local hoursPassed = difference / 3600  -- Convert seconds to hours
+        if hoursPassed >= 1 then
+            eq.set_data(cityStatus, os.date("%c"));
+			local cityFactionStatus = "qeynosFaction";
+			if eq.get_data(cityFactionStatus) ~= "" then
+				eq.set_data(cityFactionStatus, "hostile");
+				local guardsBucketKey = "qeynosGuards";
+				local qeynosGuards = eq.get_data(guardsBucketKey);
+				if qeynosGuards ~= "" then
+					eq.set_data(guardsBucketKey, "0"); --reset guard count to 0
+					if eq.get_data(cityRepop) == "no" then
+						eq.set_data(cityRepop, "yes"); --Set databucket to repop
+					end
+					if eq.get_data(cityRepopSecond) == "no" then
+						eq.set_data(cityRepopSecond, "yes")
+					end
+					e.self:Say("Right away sir! Sending word sir!");
+				end
 			end
 		else
-			e.self:Say("Apologies sir, the master of coin is out... The next time the vault can be collected from is in: " ..tostring(math.floor(3 - tonumber(dayspassed))).." days.");
+			e.self:Say("I'm sorry sir, the guard is not currently available!");
 		end
 	else
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityCurrentStatus:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
 
-		if cityBankAmount ~= "" then
-			e.self:Say("Sir, the bank currently has: " ..cityBankAmount .." platinum. Here you are!");
-			e.other:QuestReward(e.self,0,0,0,tonumber(cityBankAmount))
-			eq.set_data(cityBank, tostring(0));
-			eq.set_data(cityBankCollect, os.date("%c"));
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed cityCurrentStatus data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
+        
+        -- Convert month name to number
+        local months = {
+            Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
+            Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
+        }
+
+        -- Build the timeTable
+        local timeTable = {
+            year = tonumber(year),
+            month = months[month],
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec)
+        }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
+        local unixTimestamp = os.time(timeTable)
+
+        -- Get the current Unix timestamp
+        local now = os.time()
+		eq.set_data(cityStatus, os.date("%c")); --Initialize time if nothing exists
+    end
+end
+
+function reset_guard_peaceful(e)
+	local cityRepop = "qeynosRepop";
+	local cityRepopSecond = "qeynos2Repop";
+    local cityStatus = "qeynosReset"
+    local cityCurrentStatus = eq.get_data(cityStatus)
+
+    -- Check if the collection timer exists
+    if cityCurrentStatus ~= "" then
+        -- Adjust the pattern to match the format: "Tue Mar  4 22:24:40 2025"
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityCurrentStatus:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
+
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed cityCurrentStatus data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
+        
+        -- Convert month name to number
+        local months = {
+            Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
+            Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
+        }
+
+        -- Build the timeTable
+        local timeTable = {
+            year = tonumber(year),
+            month = months[month],
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec)
+        }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
+        local unixTimestamp = os.time(timeTable)
+
+        -- Get the current Unix timestamp
+        local now = os.time()
+
+        -- Calculate the difference in seconds between now and the stored time
+        local difference = now - unixTimestamp
+
+        -- Calculate the number of days passed
+        local hoursPassed = difference / 3600  -- Convert seconds to hours
+        if hoursPassed >= 1 then
+            eq.set_data(cityStatus, os.date("%c"));
+			local cityFactionStatus = "qeynosFaction";
+			if eq.get_data(cityFactionStatus) ~= "" then
+				eq.set_data(cityFactionStatus, "peaceful");
+				local guardsBucketKey = "qeynosGuards";
+				local qeynosGuards = eq.get_data(guardsBucketKey);
+				if qeynosGuards ~= "" then
+					eq.set_data(guardsBucketKey, "0"); --reset guard count to 0
+					if eq.get_data(cityRepop) == "no" then
+						eq.set_data(cityRepop, "yes"); --Set databucket to repop
+					end
+					if eq.get_data(cityRepopSecond) == "no" then
+						eq.set_data(cityRepopSecond, "yes")
+					end
+					e.self:Say("Right away sir! Sending word sir!");
+				end
+			end
+        else
+			e.self:Say("I'm sorry sir, the guard is not currently available!");
 		end
+	else
+		local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+		local _, month, day, hour, min, sec, year = cityCurrentStatus:match(pattern)
+        
+        -- Debugging: Print the matched values
+        print("Parsed values: ", month, day, hour, min, sec, year)
+
+        -- Ensure that all required values are valid
+        if not month or not day or not hour or not min or not sec or not year then
+            print("Error: Malformed cityCurrentStatus data")
+            -- Handle the error: set a default date (for example, the current date)
+            month, day, hour, min, sec, year = "Jan", "01", "00", "00", "00", os.date("%Y")
+        end
+        
+        -- Convert month name to number
+        local months = {
+            Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
+            Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
+        }
+
+        -- Build the timeTable
+        local timeTable = {
+            year = tonumber(year),
+            month = months[month],
+            day = tonumber(day),
+            hour = tonumber(hour),
+            min = tonumber(min),
+            sec = tonumber(sec)
+        }
+
+        -- Debugging: Print the timeTable
+        print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+        -- Get the Unix timestamp from the timeTable
+        local unixTimestamp = os.time(timeTable)
+
+        -- Get the current Unix timestamp
+        local now = os.time()
+		eq.set_data(cityStatus, os.date("%c")); --Initialize time if nothing exists
 	end
 end
 
@@ -238,53 +470,79 @@ function set_base_stats(e)
 
 	local zone = eq.get_zone_long_name();
 	local level = eq.get_rule("Character:MaxLevel") --Guards scale with character max level
-	e.self:SetLevel(tonumber(level));
-
-	local hp = query("SELECT hp FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local ac = query("SELECT ac FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local str = query("SELECT strength FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local sta = query("SELECT stamina FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local min_hit = query("SELECT min_dmg FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local max_hit = query("SELECT max_dmg FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local attack = query("SELECT attack FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local accuracy = query("SELECT accuracy FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local attackdelay = query("SELECT attack_delay FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
-	local mr = query("SELECT magic_resist FROM npc_scale_global_base WHERE level = "..e.self:GetLevel());
+	local levelAdjustment = tonumber(level) + 2;
+	local npcClass = e.self:GetClass();
 	
-	for i,hp in pairs(hp) do
-		e.self:ModifyNPCStat("max_hp", ""..hp);
-		e.self:SetHP(e.self:GetMaxHP());
+	e.self:SetLevel(levelAdjustment); --Add +2 to max level		
+
+	if (level == "20") then
+		local hp = "1150"; --+500 from normal
+		local ac = "70";
+		local str = "99";
+		local sta = "99";
+		local min_hit = "20"; --+10 from normal
+		local max_hit = "46";
+		local hp_regen = "3";
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "35") then
+		local hp = "5250" --+2000 from normal
+		local ac = "150"
+		local str = "135"
+		local sta = "135"
+		local min_hit = "55" --+30 from normal
+		local max_hit = "101"
+		local hp_regen = "5"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:Shout("hp "..hp);
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:Shout("min hit "..min_hit);
+		e.self:Shout("max hit "..max_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "50") then
+		local hp = "20120" --+5000 from normal
+		local ac = "190"
+		local str = "191"
+		local sta = "191"
+		local min_hit = "101" --+40 from normal
+		local max_hit = "175"
+		local hp_regen = "6"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
 	end
-	for i,ac in pairs(ac) do
-		e.self:ModifyNPCStat("AC", ""..ac);
-	end
-	for i,str in pairs(str) do
-		e.self:ModifyNPCStat("STR", ""..str);
-	end
-	for i,sta in pairs(sta) do
-		e.self:ModifyNPCStat("STA", ""..sta);
-	end
-	for i,min_hit in pairs(min_hit) do
-		e.self:ModifyNPCStat("min_hit", ""..min_hit);
-	end
-	for i,max_hit in pairs(max_hit) do
-		e.self:ModifyNPCStat("max_hit", ""..max_hit);
-	end
-	for i,attack in pairs(attack) do
-		e.self:ModifyNPCStat("ATK", ""..attack * 6);
-	end
-	for i,accuracy in pairs(accuracy) do
-		e.self:ModifyNPCStat("accuracy", ""..accuracy);
-	end
-	for i,attackdelay in pairs(attackdelay) do
-		e.self:ModifyNPCStat("attack_delay", ""..attackdelay);
-	end
-	for i,mr in pairs(mr) do
-		e.self:ModifyNPCStat("MR", ""..mr);
-	end
-	--defaults
-	e.self:ModifyNPCStat("npc_spells_id", tostring(spellsets[e.self:GetClassName()]));
-	-- I dont think these work :(
-	--e.self:ModifyNPCStat("AggroRange", tostring(70));
-	--e.self:ModifyNPCStat("AssistRange", tostring(70));
 end

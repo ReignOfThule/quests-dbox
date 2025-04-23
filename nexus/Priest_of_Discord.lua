@@ -4,6 +4,7 @@ function event_say(e)
 	local y = e.other:GetY(); 
 	local z = e.other:GetZ(); 
 	local h = e.other:GetHeading();
+	local corpse = 0;
 	local charID = e.other:CharacterID();
 	local class = e.other:GetClass();
 	local level = e.other:GetLevel();
@@ -30,7 +31,15 @@ function event_say(e)
 	local familiar = e.other:GetAA(412);
 
 	if(e.message:findi("hail")) then
-		e.other:Message(13, "Dead again? I summon corpses here once every 30 minutes. If you'd like to train in "..eq.say_link("Alternate Advancements").. " I can also help");
+		e.other:Message(13, "Dead again? I can "..eq.say_link("summon corpses").. " here after they decay. If you'd like to train in "..eq.say_link("Alternate Advancements").. " I can also help");
+	elseif(e.message:findi("summon corpses")) then
+		corpse = eq.get_player_burried_corpse_count(charID);
+		if corpse > 0 then
+			e.other:Message(13, "Here is your corpse. Some advice? Perhaps die less.");
+			eq.summon_burried_player_corpse(charID, x, y, z, h);
+		else
+			e.other:Message(13, "Why do you waste my time... Your corpse is not yet ready!");
+		end
 	elseif(e.message:findi("Alternate Advancements")) then
         e.other:Message(13, eq.say_link("Blessing of Strength"));
         e.other:Message(13, eq.say_link("Blessing of Stamina"));
@@ -223,7 +232,7 @@ function event_say(e)
 				e.other:IncrementAA(32);
 				e.other:Message(2, "The Blessing of Symbols has been placed in your inventory!");
 				e.other:IncrementAA(32);
-				e.other:Messsage(2, "You gained an additional rank in Blessing of Symbols");
+				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
 				e.other:IncrementAA(32);
 				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
 				e.other:IncrementAA(32);
@@ -262,9 +271,9 @@ function event_say(e)
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
 				e.other:Message(2, "You gained a rank in Master Crafting!");
-				e.other:SetSkill(60, 299);
+				e.other:SetSkill(60, 250);
 				e.other:Message(2, "You are now a master in Baking!");
-				e.other:SetSkill(65, 299);
+				e.other:SetSkill(65, 250);
 				e.other:Message(2, "You are now a master in Brewing!");
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
@@ -274,9 +283,9 @@ function event_say(e)
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
 				e.other:Message(2, "You gained a rank in Master Crafting!");
-				e.other:SetSkill(61, 299);
+				e.other:SetSkill(61, 250);
 				e.other:Message(2, "You are now a master in Tailoring!");
-				e.other:SetSkill(63, 299);
+				e.other:SetSkill(63, 250);
 				e.other:Message(2, "You are now a master in Blacksmithing!");
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
@@ -286,7 +295,7 @@ function event_say(e)
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
 				e.other:Message(2, "You gained a rank in Master Crafting!");
-				e.other:SetSkill(68, 299);
+				e.other:SetSkill(68, 250);
 				e.other:Message(2, "You are now a master in Jewelry Making!");
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");

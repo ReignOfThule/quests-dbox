@@ -1,0 +1,53 @@
+--local expvalues = {
+ --   "18" = 500000, "4" = 500000, "20" = 1000000, "15" = 1000000, "13" = 1000000,
+--}
+--[[#define CON_GREEN		2
+#define CON_LIGHTBLUE	18
+#define CON_BLUE		4
+#define CON_WHITE		20
+#define CON_YELLOW		15
+#define CON_RED			13]]
+
+function event_death(e)
+    local killerID = e.killer:GetID()
+    local killer = eq.get_entity_list():GetMob(killerID)
+
+    if killer:IsNPC() then
+        if killer:IsPet() and killer:GetOwner():IsClient() then
+            killer = killer:GetOwner()
+        else
+            return
+        end
+    end
+    
+    local player_list = nil;
+    local player_list_count = 0;
+
+
+    local con = killer:GetLevelCon(e.self:GetLevel())
+
+    if con == 2 then --green con
+        return
+    end 
+
+    player_list = killer:CastToClient():GetGroup();
+    player_list_count = player_list:GroupCount();
+
+    if (player_list.valid) then
+        --killer:CastToClient():Message(15, "grp valid");
+        for i = 0, player_list_count - 1 do
+            --killer:CastToClient():Message(15, "boooom");
+            local player = player_list:GetMember(i);
+            local currentAA = player:CastToClient():GetAAExp();
+            local currentXP = player:CastToClient():GetEXP();
+            player:CastToClient():SetEXP(currentXP, currentAA + 2000000); --10% AA xp
+            --player:CastToClient():Message(15, "here's the xps");
+        end
+    else
+        local currentAA = killer:CastToClient():GetAAExp();
+        local currentXP = killer:CastToClient():GetEXP();
+       -- killer:CastToClient():Message(15, "Not in group");
+        killer:CastToClient():SetEXP(currentXP, currentAA + 2000000); --10% AA xp
+    end
+end
+        

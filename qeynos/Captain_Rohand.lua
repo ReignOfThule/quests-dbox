@@ -63,3 +63,7 @@ function event_trade(e)
 	end		 
 	item_lib.return_items(e.self, e.other, e.trade, e.text)
   end
+
+function event_spawn(e)
+	e.self:SetNPCFactionID(0); --peaceful
+end

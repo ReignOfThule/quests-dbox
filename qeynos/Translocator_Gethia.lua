@@ -6,3 +6,7 @@ function event_say(e)
 		e.self:Say("Off you go!");
 	end
 end
+
+function event_spawn(e)
+	e.self:SetNPCFactionID(0); --peaceful
+end
