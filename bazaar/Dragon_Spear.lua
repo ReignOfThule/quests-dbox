@@ -17,59 +17,67 @@ function event_say(e)
         e.other:Message(2, eq.say_link("TIER 3").. " - Lvl 36-50");
 
     elseif e.message:findi("TIER 1") then
-        e.other:Message(2, eq.item_link(32633).. "125 Points "..eq.say_link("Purchase Flaming Zweihander"));
-        e.other:Message(2, eq.item_link(32634).. "125 Points "..eq.say_link("Purchase Gloomwater Axe"));
-        e.other:Message(2, eq.item_link(32635).. "75 Points "..eq.say_link("Purchase Serrated Bone Sword"));
-        e.other:Message(2, eq.item_link(32636).. "75 Points "..eq.say_link("Purchase Frozen Steel Dirk"));
-        e.other:Message(2, eq.item_link(32637).. "75 Points "..eq.say_link("Purchase Terror Whip"));
-        e.other:Message(2, eq.item_link(32638).. "75 Points "..eq.say_link("Purchase Brusco's Short Sword of Pain"));
-        e.other:Message(2, eq.item_link(32639).. "125 Points "..eq.say_link("Purchase Orc Slayer"));
-        e.other:Message(2, eq.item_link(32640).. "75 Points "..eq.say_link("Purchase Donal's Warhammer of Mourning"));
-        e.other:Message(2, eq.item_link(32641).. "75 Points "..eq.say_link("Purchase Adamantite Morning Star"));
-        e.other:Message(2, eq.item_link(32642).. "75 Points "..eq.say_link("Purchase Tagar's Staff of Insects"));
-        e.other:Message(2, eq.item_link(32643).. "75 Points "..eq.say_link("Purchase Runescale Staff"));
-        e.other:Message(2, eq.item_link(32644).. "75 Points "..eq.say_link("Purchase Scepter of Forlorn Agony"));
-
+        e.other:Message(2, eq.item_link(32633).. "250 Points "..eq.say_link("Purchase Flaming Zweihander"));
+        e.other:Message(2, eq.item_link(32634).. "250 Points "..eq.say_link("Purchase Gloomwater Axe"));
+        e.other:Message(2, eq.item_link(32639).. "250 Points "..eq.say_link("Purchase Orc Slayer"));
+        e.other:Message(2, eq.item_link(32710).. "250 Points "..eq.say_link("Purchase Wu's Staff of Pain"));
+        e.other:Message(2, eq.item_link(32635).. "150 Points "..eq.say_link("Purchase Serrated Bone Sword"));
+        e.other:Message(2, eq.item_link(32636).. "150 Points "..eq.say_link("Purchase Frozen Steel Dirk"));
+        e.other:Message(2, eq.item_link(32637).. "150 Points "..eq.say_link("Purchase Terror Whip"));
+        e.other:Message(2, eq.item_link(32709).. "150 Points "..eq.say_link("Purchase Serrated Steel Ulak"));
+        e.other:Message(2, eq.item_link(32711).. "150 Points "..eq.say_link("Purchase Terror Forged Ulak"));
+        e.other:Message(2, eq.item_link(32638).. "150 Points "..eq.say_link("Purchase Brusco's Short Sword of Pain"));
+        e.other:Message(2, eq.item_link(32640).. "150 Points "..eq.say_link("Purchase Donal's Warhammer of Mourning"));
+        e.other:Message(2, eq.item_link(32641).. "150 Points "..eq.say_link("Purchase Adamantite Morning Star"));
+        e.other:Message(2, eq.item_link(32642).. "150 Points "..eq.say_link("Purchase Tagar's Staff of Insects"));
+        e.other:Message(2, eq.item_link(32643).. "150 Points "..eq.say_link("Purchase Runescale Staff"));
+        e.other:Message(2, eq.item_link(32644).. "150 Points "..eq.say_link("Purchase Scepter of Forlorn Agony"));
+        e.other:Message(2, eq.item_link(32715).. "100 Points "..eq.say_link("Planar Temper"));
     elseif e.message:findi("TIER 2") then
-        e.other:Message(2, eq.item_link(32645).. "250 Points "..eq.say_link("Purchase Charred Axe of the Executioner"));
-        e.other:Message(2, eq.item_link(32646).. "250 Points "..eq.say_link("Purchase Mithril Two Handed Blade"));
-        e.other:Message(2, eq.item_link(32647).. "175 Points "..eq.say_link("Purchase Shadow Flame Scimitar"));
-        e.other:Message(2, eq.item_link(32648).. "175 Points "..eq.say_link("Purchase Dirk of the Dain"));
-        e.other:Message(2, eq.item_link(32649).. "175 Points "..eq.say_link("Purchase Silver Mace of Rage"));
-        e.other:Message(2, eq.item_link(32650).. "175 Points "..eq.say_link("Purchase Kelin's Lucid Dagger"));
-        e.other:Message(2, eq.item_link(32651).. "175 Points "..eq.say_link("Purchase Giant Slayer"));
-        e.other:Message(2, eq.item_link(32652).. "175 Points "..eq.say_link("Purchase Donal's Hammer of Damnation"));
-        e.other:Message(2, eq.item_link(32653).. "175 Points "..eq.say_link("Purchase Oakwynd Scimitar"));
-        e.other:Message(2, eq.item_link(32654).. "175 Points "..eq.say_link("Purchase Togur's Staff of Insects"));
-        e.other:Message(2, eq.item_link(32655).. "175 Points "..eq.say_link("Purchase Staff of Mardu"));
-        e.other:Message(2, eq.item_link(32656).. "175 Points "..eq.say_link("Purchase Crystal Staff of Darkness"));
+        e.other:Message(2, eq.item_link(32645).. "500 Points "..eq.say_link("Purchase Charred Axe of the Executioner"));
+        e.other:Message(2, eq.item_link(32646).. "500 Points "..eq.say_link("Purchase Mithril Two Handed Blade"));
+        e.other:Message(2, eq.item_link(32712).. "500 Points "..eq.say_link("Purchase Treant Great Staff"));
+        e.other:Message(2, eq.item_link(32647).. "350 Points "..eq.say_link("Purchase Shadow Flame Scimitar"));
+        e.other:Message(2, eq.item_link(32648).. "350 Points "..eq.say_link("Purchase Dirk of the Dain"));
+        e.other:Message(2, eq.item_link(32713).. "350 Points "..eq.say_link("Purchase Ulak of Order"));
+        e.other:Message(2, eq.item_link(32714).. "350 Points "..eq.say_link("Purchase Ulak of Discord"));
+        e.other:Message(2, eq.item_link(32649).. "350 Points "..eq.say_link("Purchase Silver Mace of Rage"));
+        e.other:Message(2, eq.item_link(32650).. "350 Points "..eq.say_link("Purchase Kelin's Lucid Dagger"));
+        e.other:Message(2, eq.item_link(32651).. "350 Points "..eq.say_link("Purchase Giant Slayer"));
+        e.other:Message(2, eq.item_link(32652).. "350 Points "..eq.say_link("Purchase Donal's Hammer of Damnation"));
+        e.other:Message(2, eq.item_link(32653).. "350 Points "..eq.say_link("Purchase Oakwynd Scimitar"));
+        e.other:Message(2, eq.item_link(32654).. "350 Points "..eq.say_link("Purchase Togur's Staff of Insects"));
+        e.other:Message(2, eq.item_link(32655).. "350 Points "..eq.say_link("Purchase Staff of Mardu"));
+        e.other:Message(2, eq.item_link(32656).. "350 Points "..eq.say_link("Purchase Crystal Staff of Darkness"));
+        e.other:Message(2, eq.item_link(32715).. "100 Points "..eq.say_link("Planar Temper"));
 
         
     elseif e.message:findi("TIER 3") then
-        e.other:Message(2, eq.item_link(32657).. "500 Points "..eq.say_link("Purchase Ancient Singing Short Sword"));
-        e.other:Message(2, eq.item_link(32658).. "500 Points "..eq.say_link("Purchase Ancient Water Sprinkler of Nem Ankh"));
-        e.other:Message(2, eq.item_link(32659).. "500 Points "..eq.say_link("Purchase Ancient Nature Walkers Scimitar"));
-        e.other:Message(2, eq.item_link(32660).. "500 Points "..eq.say_link("Purchase Ancient Staff of the Serpent"));
-        e.other:Message(2, eq.item_link(32661).. "500 Points "..eq.say_link("Purchase Ancient Orb of Mastery"));
-        e.other:Message(2, eq.item_link(32662).. "500 Points "..eq.say_link("Purchase Ancient Celestial Fists"));
-        e.other:Message(2, eq.item_link(32663).. "500 Points "..eq.say_link("Purchase Ancient Scythe of the Shadowed Soul"));
-        e.other:Message(2, eq.item_link(32664).. "500 Points "..eq.say_link("Purchase Ancient Fiery Defender"));
-        e.other:Message(2, eq.item_link(32665).. "500 Points "..eq.say_link("Purchase Ancient Swiftwind"));
-        e.other:Message(2, eq.item_link(32666).. "500 Points "..eq.say_link("Purchase Ancient Earthcaller"));
-        e.other:Message(2, eq.item_link(32667).. "500 Points "..eq.say_link("Purchase Ancient Ragebringer"));
-        e.other:Message(2, eq.item_link(32668).. "500 Points "..eq.say_link("Purchase Ancient Innoruuks Curse"));
-        e.other:Message(2, eq.item_link(32669).. "500 Points "..eq.say_link("Purchase Ancient Spear of Fate"));
-        e.other:Message(2, eq.item_link(32670).. "500 Points "..eq.say_link("Purchase Ancient Jagged Blade of War"));
-        e.other:Message(2, eq.item_link(32671).. "500 Points "..eq.say_link("Purchase Ancient Blade of Strategy"));
-        e.other:Message(2, eq.item_link(32672).. "500 Points "..eq.say_link("Purchase Ancient Blade of Tactics"));
-        e.other:Message(2, eq.item_link(32673).. "500 Points "..eq.say_link("Purchase Ancient Staff of the Four"));
+        e.other:Message(2, eq.item_link(32657).. "1000 Points "..eq.say_link("Purchase Ancient Singing Short Sword"));
+        e.other:Message(2, eq.item_link(32658).. "1000 Points "..eq.say_link("Purchase Ancient Water Sprinkler of Nem Ankh"));
+        e.other:Message(2, eq.item_link(32659).. "1000 Points "..eq.say_link("Purchase Ancient Nature Walkers Scimitar"));
+        e.other:Message(2, eq.item_link(32660).. "1000 Points "..eq.say_link("Purchase Ancient Staff of the Serpent"));
+        e.other:Message(2, eq.item_link(32661).. "1000 Points "..eq.say_link("Purchase Ancient Orb of Mastery"));
+        e.other:Message(2, eq.item_link(32662).. "1000 Points "..eq.say_link("Purchase Ancient Celestial Fists"));
+        e.other:Message(2, eq.item_link(32663).. "1000 Points "..eq.say_link("Purchase Ancient Scythe of the Shadowed Soul"));
+        e.other:Message(2, eq.item_link(32664).. "1000 Points "..eq.say_link("Purchase Ancient Fiery Defender"));
+        e.other:Message(2, eq.item_link(32665).. "1000 Points "..eq.say_link("Purchase Ancient Swiftwind"));
+        e.other:Message(2, eq.item_link(32666).. "1000 Points "..eq.say_link("Purchase Ancient Earthcaller"));
+        e.other:Message(2, eq.item_link(32667).. "1000 Points "..eq.say_link("Purchase Ancient Ragebringer"));
+        e.other:Message(2, eq.item_link(32668).. "1000 Points "..eq.say_link("Purchase Ancient Innoruuks Curse"));
+        e.other:Message(2, eq.item_link(32669).. "1000 Points "..eq.say_link("Purchase Ancient Spear of Fate"));
+        e.other:Message(2, eq.item_link(32670).. "1000 Points "..eq.say_link("Purchase Ancient Jagged Blade of War"));
+        e.other:Message(2, eq.item_link(32671).. "1000 Points "..eq.say_link("Purchase Ancient Blade of Strategy"));
+        e.other:Message(2, eq.item_link(32672).. "1000 Points "..eq.say_link("Purchase Ancient Blade of Tactics"));
+        e.other:Message(2, eq.item_link(32673).. "1000 Points "..eq.say_link("Purchase Ancient Staff of the Four"));
+        e.other:Message(2, eq.item_link(32715).. "100 Points "..eq.say_link("Planar Temper"));
 
     
     --Tier 1
     elseif e.message:findi("Purchase Flaming Zweihander") then
             e.other:Message(2, eq.say_link("Confirm Purchase of Flaming Zweihander"));
     elseif e.message:findi("Confirm Purchase of Flaming Zweihander") then
-        itemCost = 75;
+        itemCost = 250;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32633);
@@ -80,7 +88,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Gloomwater Axe") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Gloomwater Axe"));
     elseif e.message:findi("Confirm Purchase of Gloomwater Axe") then
-        itemCost = 75;
+        itemCost = 250;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32634);
@@ -91,7 +99,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Serrated Bone Sword") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Serrated Bone Sword"));
     elseif e.message:findi("Confirm Purchase of Serrated Bone Sword") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32635);
@@ -103,7 +111,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Frozen Steel Dirk") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Frozen Steel Dirk"));  
     elseif e.message:findi("Confirm Purchase of Frozen Steel Dirk") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32636);
@@ -114,7 +122,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Terror Whip") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Terror Whip"));  
     elseif e.message:findi("Confirm Purchase of Terror Whip") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32637);
@@ -125,7 +133,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Brusco's Short Sword of Pain") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Brusco's Short Sword of Pain"));  
     elseif e.message:findi("Confirm Purchase of Brusco's Short Sword of Pain") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32638);
@@ -136,7 +144,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Orc Slayer") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Orc Slayer"));  
     elseif e.message:findi("Confirm Purchase of Orc Slayer") then
-        itemCost = 75;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32639);
@@ -147,7 +155,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Donal's Warhammer of Mourning") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Donal's Warhammer of Mourning"));  
     elseif e.message:findi("Confirm Purchase of Donal's Warhammer of Mourning") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32640);
@@ -158,7 +166,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Adamantite Morning Star") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Adamantite Morning Star"));  
     elseif e.message:findi("Confirm Purchase of Adamantite Morning Star") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32641);
@@ -169,7 +177,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Tagar's Staff of Insects") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Tagar's Staff of Insects"));  
     elseif e.message:findi("Confirm Purchase of Tagar's Staff of Insects") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32642);
@@ -180,7 +188,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Runescale Staff") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Runescale Staff"));  
     elseif e.message:findi("Confirm Purchase of Runescale Staff") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32643);
@@ -191,7 +199,7 @@ function event_say(e)
     elseif e.message:findi("Purchase Scepter of Forlorn Agony") then
         e.other:Message(2, eq.say_link("Confirm Purchase of Scepter of Forlorn Agony"));  
     elseif e.message:findi("Confirm Purchase of Scepter of Forlorn Agony") then
-        itemCost = 50;
+        itemCost = 150;
         if pvpPoints >= itemCost then
             e.other:Message(2, "Congratulations on your new item!");
             e.other:SummonItem(32644);

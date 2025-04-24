@@ -1,8 +1,8 @@
 local saved_char_id = 0;
 
---function event_discover_item(e)
---	eq.world_emote(MT.White, "" .. e.self:GetCleanName() .. " has discovered " .. e.item:Name() .. "" );
---end
+function event_discover_item(e)
+	eq.world_emote(15, "" .. e.self:GetCleanName() .. " has discovered " .. eq.item_link(e.item:ID()) .. "!" );
+end
 
 function event_connect(e)
 	local charID = e.self:CharacterID();
@@ -34,21 +34,21 @@ end
 
 function event_cast_begin(e)
 	--AA List
-	local str = e.other:GetAA(2);
-	local sta = e.other:GetAA(7);
-	local haste = e.other:GetAA(12);
-	local seeinvis = e.other:GetAA(17);
-	local clarity = e.other:GetAA(22);
-	local reso = e.other:GetAA(27);
-	local symb = e.other:GetAA(32);
-	local fr = e.other:GetAA(37);
-	local cr = e.other:GetAA(42);
-	local mr = e.other:GetAA(47);
-	local pr = e.other:GetAA(52);
-	local dr = e.other:GetAA(57);
-	local sow = e.other:GetAA(68);
-	local makeshift = e.other:GetAA(71);
-	local familiar = e.other:GetAA(412);
+	local str = e.self:GetAA(2);
+	local sta = e.self:GetAA(7);
+	local haste = e.self:GetAA(12);
+	local seeinvis = e.self:GetAA(17);
+	local clarity = e.self:GetAA(22);
+	local reso = e.self:GetAA(27);
+	local symb = e.self:GetAA(32);
+	local fr = e.self:GetAA(37);
+	local cr = e.self:GetAA(42);
+	local mr = e.self:GetAA(47);
+	local pr = e.self:GetAA(52);
+	local dr = e.self:GetAA(57);
+	local sow = e.self:GetAA(68);
+	local makeshift = e.self:GetAA(71);
+	local familiar = e.self:GetAA(412);
 
 	local charLevel = e.self:GetLevel();
 	local charID = e.self:CharacterID();
@@ -91,6 +91,21 @@ function event_level_up(e)
 end
 
 function event_cast(e)
+	local str = e.self:GetAA(2);
+	local sta = e.self:GetAA(7);
+	local haste = e.self:GetAA(12);
+	local seeinvis = e.self:GetAA(17);
+	local clarity = e.self:GetAA(22);
+	local reso = e.self:GetAA(27);
+	local symb = e.self:GetAA(32);
+	local fr = e.self:GetAA(37);
+	local cr = e.self:GetAA(42);
+	local mr = e.self:GetAA(47);
+	local pr = e.self:GetAA(52);
+	local dr = e.self:GetAA(57);
+	local sow = e.self:GetAA(68);
+	local makeshift = e.self:GetAA(71);
+	local familiar = e.self:GetAA(412);
 	local charLevel = e.self:GetLevel();
 	local charID = e.self:CharacterID();
 	local clericResoRecast = eq.get_data(tostring(charID).."clericResoTimer");

@@ -97,176 +97,176 @@ function event_say(e)
         e.other:Message(13, eq.say_link("Confirm Purchase Class _Special"));
 
 	elseif(e.message:findi("Confirm Purchase Blessing of Str")) then
-		if(tostring(str)) == "0" then
-			if (aaPoints >= 2) then
-				e.other:SetAAPoints(aaPoints - 2);
-				e.other:IncrementAA(2);
-				e.other:Message(2, "The Blessing of Strength has been placed in your inventory!");
-				e.other:IncrementAA(2);
-				e.other:Message(2, "You gained an additional rank in Blessing of Strength");
-				e.other:IncrementAA(2);
-				e.other:Message(2, "You gained an additional rank in Blessing of Strength");
-				e.other:IncrementAA(2);
-				e.other:Message(2, "You gained an additional rank in Blessing of Strength");
-				e.other:IncrementAA(2);
-				e.other:Message(2, "You gained an additional rank in Blessing of Strength");
-				e.other:SummonItem(2431);
-			else
-				e.other:Message(13, "Not enough AA's available for this purchase!");
+		if str == 0 then
+			e.other:SetAAPoints(aaPoints - 2);
+			e.other:IncrementAA(2);
+			e.other:Message(2, "The Blessing of Strength has been placed in your inventory!");
+			e.other:SummonItem(2431);
+		elseif str < 5 then
+			if str > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(2);
+					e.other:Message(2, "You gained an additional rank in Blessing of Strength");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 	elseif(e.message:findi("Confirm Purchase Blessing of Sta")) then
-		if(tostring(sta)) == "0" then
+		if sta == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(7);
 				e.other:Message(2, "The Blessing of Stamina has been placed in your inventory!");
-				e.other:IncrementAA(7);
-				e.other:Message(2, "You gained an additional rank in Blessing of Stamina");
-				e.other:IncrementAA(7);
-				e.other:Message(2, "You gained an additional rank in Blessing of Stamina");
-				e.other:IncrementAA(7);
-				e.other:Message(2, "You gained an additional rank in Blessing of Stamina");
-				e.other:IncrementAA(7);
-				e.other:Message(2, "You gained an additional rank in Blessing of Stamina");
 				e.other:SummonItem(2432);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif sta < 5 then
+			if sta > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(7);
+					e.other:Message(2, "You gained an additional rank in Blessing of Stamina");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 	elseif(e.message:findi("Confirm Purchase Blessing of _Haste")) then
-		if(tostring(haste)) == "0" then
+		if haste == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(12);
 				e.other:Message(2, "The Blessing of Haste has been placed in your inventory!");
-				e.other:IncrementAA(12);
-				e.other:Message(2, "You gained an additional rank in Blessing of Haste");
-				e.other:IncrementAA(12);
-				e.other:Message(2, "You gained an additional rank in Blessing of Haste");
-				e.other:IncrementAA(12);
-				e.other:Message(2, "You gained an additional rank in Blessing of Haste");
-				e.other:IncrementAA(12);
-				e.other:Message(2, "You gained an additional rank in Blessing of Haste");
 				e.other:SummonItem(2433);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
 			end
+		elseif haste < 5 then
+			if haste > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(12);
+					e.other:Message(2, "You gained an additional rank in Blessing of Haste!");
+				end
+			end	
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of _Sight")) then
-		if(tostring(seeinvis)) == "0" then
+		if seeinvis == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(17);
 				e.other:Message(2, "The Blessing of Sight has been placed in your inventory!");
-				e.other:IncrementAA(17);
-				e.other:Message(2, "You gained an additional rank in Blessing of Sight");
-				e.other:IncrementAA(17);
-				e.other:Message(2, "You gained an additional rank in Blessing of Sight");
-				e.other:IncrementAA(17);
-				e.other:Message(2, "You gained an additional rank in Blessing of Sight");
-				e.other:IncrementAA(17);
-				e.other:Message(2, "You gained an additional rank in Blessing of Sight");
 				e.other:SummonItem(2434);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif seeinvis < 5 then
+			if seeinvis > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(17);
+					e.other:Message(2, "You gained an additional rank in Blessing of Sight!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 	elseif(e.message:findi("Confirm Purchase Blessing Clarity")) then
-		if(tostring(clarity)) == "0" then
+		if clarity == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(22);
 				e.other:Message(2, "The Blessing of Clarity has been placed in your inventory!");
-				e.other:IncrementAA(22);
-				e.other:Message(2, "You gained an additional rank in Blessing of Clarity");
-				e.other:IncrementAA(22);
-				e.other:Message(2, "You gained an additional rank in Blessing of Clarity");
-				e.other:IncrementAA(22);
-				e.other:Message(2, "You gained an additional rank in Blessing of Clarity");
-				e.other:IncrementAA(22);
-				e.other:Message(2, "You gained an additional rank in Blessing of Clarity");
 				e.other:SummonItem(2435);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
 			end
+		elseif clarity < 5 then
+			if clarity > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(22);
+					e.other:Message(2, "You gained an additional rank in Blessing of Clarity!");
+				end
+			end	
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of _Resolution")) then
-		if(tostring(reso)) == "0" then
+		if reso == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(27);
 				e.other:Message(2, "The Blessing of Resolution has been placed in your inventory!");
-				e.other:IncrementAA(27);
-				e.other:Message(2, "You gained an additional rank in Blessing of Resolution");
-				e.other:IncrementAA(27);
-				e.other:Message(2, "You gained an additional rank in Blessing of Resolution");
-				e.other:IncrementAA(27);
-				e.other:Message(2, "You gained an additional rank in Blessing of Resolution");
-				e.other:IncrementAA(27);
-				e.other:Message(2, "You gained an additional rank in Blessing of Resolution");
 				e.other:SummonItem(2436);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif reso < 5 then
+			if reso > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(27);
+					e.other:Message(2, "You gained an additional rank in Blessing of Resolution!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of _Symbols")) then
-		if(tostring(symb)) == "0" then
+		if symb == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(32);
 				e.other:Message(2, "The Blessing of Symbols has been placed in your inventory!");
-				e.other:IncrementAA(32);
-				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
-				e.other:IncrementAA(32);
-				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
-				e.other:IncrementAA(32);
-				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
-				e.other:IncrementAA(32);
-				e.other:Message(2, "You gained an additional rank in Blessing of Symbols");
 				e.other:SummonItem(2442);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif symb < 5 then
+			if symb > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(32);
+					e.other:Message(2, "You gained an additional rank in Blessing of Symbols!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Makeshift _Illusion")) then
-		if(tostring(makeshift)) == "0" then
-			if (aaPoints >= 6) then
-				e.other:SetAAPoints(aaPoints - 6);
+		if makeshift == 0 then
+			if (aaPoints >= 3) then
+				e.other:SetAAPoints(aaPoints - 3);
 				e.other:Message(2, "The Illusionists Staff has been placed in your inventory!");
-				e.other:IncrementAA(71);
-				e.other:Message(2, "You gained the ability Makeshift Illusion!");
-				e.other:IncrementAA(71);
-				e.other:Message(2, "You gained the ability Makeshift Illusion!");
 				e.other:IncrementAA(71);
 				e.other:SummonItem(2443);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif makeshift < 3 then
+			if makeshift > 0 then
+				if (aaPoints >= 3) then
+					e.other:SetAAPoints(aaPoints - 3);
+					e.other:Message(2, "You gained an additional rank in Makeshift Illusion!");
+					e.other:IncrementAA(71);
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Master _Crafter")) then
-		if(tostring(mastercraft)) == "0" then
+		if mastercraft == 0 then
 			if (aaPoints >= 6) then
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
@@ -278,7 +278,7 @@ function event_say(e)
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
 			end
-		elseif(tostring(mastercraft)) == "1" then
+		elseif mastercraft == 1 then
 			if (aaPoints >= 6) then
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
@@ -290,7 +290,7 @@ function event_say(e)
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
 			end
-		elseif(tostring(mastercraft)) == "2" then
+		elseif mastercraft == 2 then
 			if (aaPoints >= 6) then
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:IncrementAA(74);
@@ -305,7 +305,7 @@ function event_say(e)
 		end
 
 	elseif(e.message:findi("Confirm Purchase AA")) then
-		if(tostring(familiar)) == "0" then
+		if familiar == 0 then
 			if (aaPoints >= 6) then
 				e.other:SetAAPoints(aaPoints - 6);
 				e.other:Message(2, "The Familiar Stone has been placed in your inventory!");
@@ -319,18 +319,22 @@ function event_say(e)
 		end
 		
 	elseif(e.message:findi("Confirm Purchase Blessing of Wolf")) then
-		if(tostring(sow)) == "0" then
+		if sow == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(68);
 				e.other:Message(2, "The Blessing of the Wolf has been placed in your inventory!");
-				e.other:IncrementAA(68);
-				e.other:Message(2, "You gained an additional rank in Blessing of the Wolf");
-				e.other:IncrementAA(68);
-				e.other:Message(2, "You gained an additional rank in Blessing of the Wolf");
 				e.other:SummonItem(2437);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif sow < 3 then
+			if sow > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(68);
+					e.other:Message(2, "You gained an additional rank in Blessing of the Wolf!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
@@ -351,8 +355,8 @@ function event_say(e)
 					e.other:IncrementAA(196); --2 Hand Bash
 					e.other:Message(2, "You gained a new ability! 2 Hand Bash!");
 				elseif tostring(class) == "4" then --Ranger
-					e.other:IncrementAA(545); --Guardian of the Forest
-					e.other:Message(2, "You gained a new ability! Guardian of the Forest! Create a hotkey with /alt activate 184 to use it.");
+					e.other:IncrementAA(205); --Endless Quiver
+					e.other:Message(2, "You gained a new ability! Endless Quiver!");
 				elseif tostring(class) == "5" then --Shadowknight
 					e.other:IncrementAA(196); --2 Hand Bash
 					e.other:Message(2, "You gained a new ability! 2 Hand Bash!");
@@ -409,127 +413,131 @@ function event_say(e)
 
 
 	elseif(e.message:findi("Confirm Purchase Blessing of FR")) then
-		if(tostring(fr)) == "0" then
+		if fr == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(37);
 				e.other:Message(2, "The Blessing of Fire Protection has been placed in your inventory!");
-				e.other:IncrementAA(37);
-				e.other:Message(2, "You gained an additional rank in Blessing of Fire Protection");
-				e.other:IncrementAA(37);
-				e.other:Message(2, "You gained an additional rank in Blessing of Fire Protection");
-				e.other:IncrementAA(37);
-				e.other:Message(2, "You gained an additional rank in Blessing of Fire Protection");
-				e.other:IncrementAA(37);
-				e.other:Message(2, "You gained an additional rank in Blessing of Fire Protection");
 				e.other:SummonItem(2438);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif fr < 5 then
+			if fr > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(37);
+					e.other:Message(2, "You gained an additional rank of Blessing of Fire Protection!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of CR")) then
-		if(tostring(cr)) == "0" then
+		if cr == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(42);
 				e.other:Message(2, "The Blessing of Cold Protection has been placed in your inventory!");
-				e.other:IncrementAA(42);
-				e.other:Message(2, "You gained an additional rank in Blessing of Cold Protection");
-				e.other:IncrementAA(42);
-				e.other:Message(2, "You gained an additional rank in Blessing of Cold Protection");
-				e.other:IncrementAA(42);
-				e.other:Message(2, "You gained an additional rank in Blessing of Cold Protection");
-				e.other:IncrementAA(42);
-				e.other:Message(2, "You gained an additional rank in Blessing of Cold Protection");
 				e.other:SummonItem(2439);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif cr < 5 then
+			if cr > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(42);
+					e.other:Message(2, "You gained an additional rank in Blessing of Cold Protection!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of MR")) then
-		if(tostring(mr)) == "0" then
+		if mr == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(47);
 				e.other:Message(2, "The Blessing of Magic Protection has been placed in your inventory!");
-				e.other:IncrementAA(47);
-				e.other:Message(2, "You gained an additional rank in Blessing of Magic Protection");
-				e.other:IncrementAA(47);
-				e.other:Message(2, "You gained an additional rank in Blessing of Magic Protection");
-				e.other:IncrementAA(47);
-				e.other:Message(2, "You gained an additional rank in Blessing of Magic Protection");
-				e.other:IncrementAA(47);
-				e.other:Message(2, "You gained an additional rank in Blessing of Magic Protection");
 				e.other:SummonItem(2487);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif mr < 5 then
+			if mr > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(47);
+					e.other:Message(2, "The Blessing of Magic Protection has been placed in your inventory!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of PR")) then
-		if(tostring(pr)) == "0" then
+		if pr == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(52);
 				e.other:Message(2, "The Blessing of Poison Protection has been placed in your inventory!");
-				e.other:IncrementAA(52);
-				e.other:Message(2, "You gained an additional rank in Blessing of Poison Protection");
-				e.other:IncrementAA(52);
-				e.other:Message(2, "You gained an additional rank in Blessing of Poison Protection");
-				e.other:IncrementAA(52);
-				e.other:Message(2, "You gained an additional rank in Blessing of Poison Protection");
-				e.other:IncrementAA(52);
-				e.other:Message(2, "You gained an additional rank in Blessing of Poison Protection");
 				e.other:SummonItem(2486);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif pr < 5 then
+			if pr > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(52);
+					e.other:Message(2, "You gained an additional rank in Blessing of Poison Protection!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Blessing of DR")) then
-		if(tostring(dr)) == "0" then
+		if dr == 0 then
 			if (aaPoints >= 2) then
 				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(57);
 				e.other:Message(2, "The Blessing of Disease Protection has been placed in your inventory!");
-				e.other:IncrementAA(57);
-				e.other:Message(2, "You gained an additional rank in Blessing of Disease Protection");
-				e.other:IncrementAA(57);
-				e.other:Message(2, "You gained an additional rank in Blessing of Disease Protection");
-				e.other:IncrementAA(57);
-				e.other:Message(2, "You gained an additional rank in Blessing of Disease Protection");
-				e.other:IncrementAA(57);
-				e.other:Message(2, "You gained an additional rank in Blessing of Disease Protection");
 				e.other:SummonItem(2485);
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif dr < 5 then
+			if dr > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(57);
+					e.other:Message(2, "You gained an additional rank in Blessing of Disease Protection!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
 		end
 
 	elseif(e.message:findi("Confirm Purchase Innate RunSpeed 3")) then
-		if(tostring(runspeed)) == "0" then
-			if (aaPoints >= 6) then
-				e.other:SetAAPoints(aaPoints - 6);
-				e.other:IncrementAA(62);
-				e.other:Message(2, "You gained an additional rank in Innate Run Speed!");
-				e.other:IncrementAA(62);
-				e.other:Message(2, "You gained an additional rank in Innate Run Speed!");
+		if runspeed == 0 then
+			if (aaPoints >= 2) then
+				e.other:SetAAPoints(aaPoints - 2);
 				e.other:IncrementAA(62);
 				e.other:Message(2, "You gained an additional rank in Innate Run Speed!");
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
+			end
+		elseif runspeed < 3 then
+			if runspeed > 0 then
+				if (aaPoints >= 2) then
+					e.other:SetAAPoints(aaPoints - 2);
+					e.other:IncrementAA(62);
+					e.other:Message(2, "You gained an additional rank in Innate Run Speed!");
+				end
 			end
 		else
 			e.other:Message(13, "You already own this ability!");
