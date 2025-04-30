@@ -17,7 +17,7 @@ local gemdrops = {
 }
 
 local fabled = {
-    32678 --Fabled Journeyman Boots
+    32745 --Fabled Charred Guardian Shield
 }
 
 function event_spawn(e)

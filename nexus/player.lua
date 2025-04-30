@@ -1,3 +1,5 @@
+
+
 function event_cast_begin(e)
 	local allowed_spells = {797, 3087, 3088, 3089, 3090, 3091, 3092, 3093, 3094, 3095, 3096, 3097}
 	local is_allowed = false
@@ -24,8 +26,13 @@ function event_enter_zone(e)
 	local playerY = e.self:GetY();
 
     local random = math.random(1,2)
-     
+    local class = e.self:GetClass();
 
+    eq.self_cast(1448); --cantata of soothing
+     
+    if class == 15 then
+        e.self:WorldKick();
+    end
     if random == 1 then
         if playerX == x then
             e.self:MovePC(152, x + math.random(1,10), y + math.random(1,10), z, h);
@@ -39,6 +46,9 @@ function event_enter_zone(e)
             e.self:MovePC(152, x - math.random(1,10), y - math.random(1,10), z, h);
         end
     end
+
+    --e.self:HealDamage(e.self:GetMaxHP(), e.self);
+    --e.self:SetMana(e.self:GetMaxMana());
 end
 
 

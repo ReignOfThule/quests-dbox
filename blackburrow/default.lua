@@ -12,20 +12,10 @@ local spelldrops = {
     32705, --Blackblood Bargain             Shd spell
 }
 
-local gemdrops = {
-    10053, --Jacinth
-    10036, --Black Sapphire
-}
-
-local fabled = {
-    32674 --Fabled Dwarven Ringmail Tunic
-}
-
 function event_spawn(e)
-    local item = spelldrops[math.random(1, #spelldrops)]
-    local item2 = gemdrops[math.random(1, #gemdrops)]
-    local item3 = fabled[math.random(1, #fabled)]
-    e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
-    e.self:AddItem(item2, 0, false) --AddItem(int item_id, int charges, bool equip)
-    e.self:AddItem(item3, 0, false) --AddItem(int item_id, int charges, bool equip)
+    local roll = math.random(1,1000) --.5% chance
+    if roll <= 5 then
+        local item = spelldrops[math.random(1, #spelldrops)]
+        e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
+    end 
 end

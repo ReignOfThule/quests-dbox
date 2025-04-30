@@ -534,6 +534,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "35") then
@@ -559,6 +560,7 @@ function set_base_stats(e)
 		e.self:Shout("max hit "..max_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "50") then
@@ -581,6 +583,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	end

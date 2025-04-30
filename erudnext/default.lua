@@ -10,50 +10,56 @@ function event_spawn(e)
 	local cityGuild = eq.get_data(cityOwnership);
 	local cityGuildName = eq.get_data(cityOwnershipName);
 	local cityFaction = eq.get_data(cityFactionStatus);
-	local maxGuards = 39;
+	local maxGuards = 30;
 
 	if e.self:GetRace() ~= 78 then
-		e.self:SetNPCFactionID(0); --peaceful
+        e.self:SetHostile(false);
+		--e.self:SetNPCFactionID(0); --peaceful
 		if (cityGuild ~= "") then
 			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 		end
 
 	elseif e.self:GetRace() == 78 then
-		if (cityGuild == "") then
-			e.self:SetNPCFactionID(0); --peaceful if no guild owns
-			set_base_stats(e);
-			local erudinGuards = "erudinGuards";
-			local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
-			if eq.get_data(erudinGuards) ~= "" then
-				if erudinGuardsQuantity < maxGuards then
-					eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
-				end
-			end
-		else
-			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
-			if (eq.get_data(cityFactionStatus) == "hostile") then
-				e.self:SetNPCFactionID(68); --hostile
-				local myFactionID = e.self:GetNPCFactionID();
-				set_base_stats(e);
-				e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
-				local erudinGuards = "erudinGuards";
-				local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
-				if eq.get_data(erudinGuards) ~= "" then
-					if erudinGuardsQuantity < maxGuards then
-						eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
-					end
-				end
-			else
-				e.self:SetNPCFactionID(0); --peaceful
-				local myFactionID = e.self:GetNPCFactionID();
-				set_base_stats(e);
-				e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
-				local erudinGuards = "erudinGuards";
-				local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
-				if eq.get_data(erudinGuards) ~= "" then
-					if erudinGuardsQuantity < maxGuards then
-						eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
-					end
+        if e.self:GetTexture() == 0 then
+            if (cityGuild == "") then
+                e.self:SetHostile(false);
+                --e.self:SetNPCFactionID(0); --peaceful if no guild owns
+                set_base_stats(e);
+                local erudinGuards = "erudinGuards";
+                local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
+                if eq.get_data(erudinGuards) ~= "" then
+                    if erudinGuardsQuantity < maxGuards then
+                        eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
+                    end
+                end
+            else
+                e.self:SetGuild(tonumber(cityGuild)); --set guild to player
+                if (eq.get_data(cityFactionStatus) == "hostile") then
+                    e.self:SetHostile(true);
+                    --e.self:SetNPCFactionID(68); --hostile
+                    local myFactionID = e.self:GetNPCFactionID();
+                    set_base_stats(e);
+                    e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+                    local erudinGuards = "erudinGuards";
+                    local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
+                    if eq.get_data(erudinGuards) ~= "" then
+                        if erudinGuardsQuantity < maxGuards then
+                            eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
+                        end
+                    end
+                else
+                    e.self:SetHostile(false);
+                    e.self:SetNPCFactionID(0); --peaceful
+                    local myFactionID = e.self:GetNPCFactionID();
+                    set_base_stats(e);
+                    e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
+                    local erudinGuards = "erudinGuards";
+                    local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
+                    if eq.get_data(erudinGuards) ~= "" then
+                        if erudinGuardsQuantity < maxGuards then
+                            eq.set_data(erudinGuards, tostring(erudinGuardsQuantity + 1));
+                        end
+                    end
 				end
 			end
 		end
@@ -111,11 +117,10 @@ function event_say(e)
 		if (cityGuild == tostring(guild_id)) then --if databucket matches guild id
 			if char_guild_rank == 2 then --if leader of guild
 				if(e.message:findi("hail")) then
-					calculate_vault(e); --calculate vault on guild leader hail and also when guards are killed
 					e.self:Say("Hail Master "..char_name.."! Would you like me to ["..eq.say_link("alert").."] the guards sir? Or, if it pleases, I could fetch the master of coin? ["..eq.say_link("check vault").."] or ["..eq.say_link("collect from vault").."]");
 				elseif(e.message:findi("check vault")) then
 					if eq.get_data(cityBank) ~= "" then
-						e.self:Say("Sir, the bank currently has: " ..eq.get_data(cityBank) .." platinum.");
+                        calculate_vault(e);
 					end
 				elseif(e.message:findi("collect from vault")) then
 					try_collect_from_vault(e)
@@ -213,8 +218,9 @@ function try_collect_from_vault(e)
 end
 
 function calculate_vault(e)
-	local bank = "erudinBank"
+    local bank = "erudinBank" 
 	local bankIncome = "erudinBankIncomeTime"
+
     
     -- Retrieve the last income time
     local timefrom = eq.get_data(bankIncome)
@@ -263,9 +269,14 @@ function calculate_vault(e)
 
         -- If there's already an amount in the bank, calculate new amount
         if bankamount ~= "" then
-            -- Ensure we don't exceed 20,000 platinum
-            if tonumber(bankamount) < 20000 then
+            -- Ensure we don't exceed 10,000 platinum
+            if tonumber(bankamount) < 10000 then
                 eq.set_data(bank, tostring(tonumber(bankamount) + incomeaccrued))
+				local bankamountfinal = eq.get_data(bank)
+				e.self:Say("Sir, the bank currently has: " .. bankamountfinal .. " platinum.")
+			else
+				local bankamountfinal = eq.get_data(bank)
+				e.self:Say("Sir, the bank currently has: " .. bankamountfinal .. " platinum.")
             end
         else
             -- If no bank amount is set, initialize it with the accrued income
@@ -280,7 +291,6 @@ function calculate_vault(e)
         eq.set_data(bank, tostring(0))
     end
 end
-
 
 
 function reset_guard_hostile(e)
@@ -534,6 +544,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "35") then
@@ -559,6 +570,7 @@ function set_base_stats(e)
 		e.self:Shout("max hit "..max_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "50") then
@@ -581,6 +593,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	end

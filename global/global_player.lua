@@ -16,6 +16,8 @@ end
 function event_enter_zone(e)
 	local charLevel = e.self:GetLevel();
 	local charID = e.self:CharacterID();
+	local charString = tostring(charID);
+    local charName = e.self:GetCleanName();
 	local charIDBind = tostring(charID).."bind"
 	local initialSpells = tostring(charID).."initialspells"
 	
@@ -27,7 +29,8 @@ function event_enter_zone(e)
 	if eq.get_data(initialSpells) == "" then
 		e.self:SummonItem(10184);
 		e.self:ScribeSpells(1, 1);
-		e.self:MaxSkills(false); 
+		e.self:MaxSkills(false);
+		eq.set_data(charName.."ThuleCoin", "0");
 		eq.set_data(initialSpells, "nexusbound");
 	end
 end
@@ -54,7 +57,9 @@ function event_cast_begin(e)
 	local charID = e.self:CharacterID();
 	local clericResoRecast = eq.get_data(tostring(charID).."clericResoTimer");
 	local clericSymbRecast = eq.get_data(tostring(charID).."clericSymbTimer");
-
+	
+	local maxLevelReached = "maxLevelReached"
+	local levelCap = eq.get_rule("Character:MaxLevel")
 
 	if e.spell == 2759 then --Undead Pact - Necromancer Dire Charm
 		if e.target_level >= e.self:GetLevel() then -- Charm target must be lower level than player
@@ -81,14 +86,38 @@ function event_cast_begin(e)
 			e.self:Message(13, "This spell is currently on a cooldown.");
 			e.self:Duck();
 		end
+	elseif e.spell == 3999 then --Maelin's Magical Concotion (XP Potion)
+		if eq.get_data(maxLevelReached) ~= "yes" then
+			e.self:Message(13, "You cannot cast this before some one reaches level "..levelCap);
+			e.self:Duck();
+		end
 	end
 end
 
 function event_level_up(e)
 	local charLevel = e.self:GetLevel();
+	local maxLevelReached = "maxLevelReached"
+	local levelCap = eq.get_rule("Character:MaxLevel")
+
 	e.self:ScribeSpells(1, charLevel); 
-	e.self:MaxSkills(false); 
+	e.self:MaxSkills(false);
+	if eq.get_data(maxLevelReached) == "no" then --Logic for XP potions only working when max level cap is hit
+		if levelCap == "20" then
+			if charLevel == 20 then
+				eq.set_data(maxLevelReached, "yes")
+			end
+		elseif levelCap == "35" then
+			if charLevel == 35 then
+				eq.set_data(maxLevelReached, "yes")
+			end
+		elseif levelCap == "50" then
+			if charLevel == 50 then
+				eq.set_data(maxLevelReached, "yes")
+			end
+		end
+	end
 end
+
 
 function event_cast(e)
 	local str = e.self:GetAA(2);

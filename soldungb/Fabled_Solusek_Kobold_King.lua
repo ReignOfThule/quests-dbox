@@ -18,7 +18,7 @@ local gemdrops = {
 }
 
 local fabled = {
-    32675 --Fabled SMR
+    32747 --Fabled Runed Mithril Bracer 
 }
 
 function event_spawn(e)

@@ -17,7 +17,8 @@ local gemdrops = {
 }
 
 local fabled = {
-    32678 --Fabled Journeyman Boots
+    32743, --Fabled Gatorscale Sleeves
+    32744 --Fabled Gatorscale Leggings
 }
 
 function event_spawn(e)

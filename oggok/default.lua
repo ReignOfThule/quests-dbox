@@ -13,14 +13,16 @@ function event_spawn(e)
 	local maxGuards = 17;
 
 	if e.self:GetRace() ~= 93 then
-		e.self:SetNPCFactionID(0); --peaceful
+        e.self:SetHostile(false);
+		--e.self:SetNPCFactionID(0); --peaceful
 		if (cityGuild ~= "") then
 			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 		end
 
 	elseif e.self:GetRace() == 93 then
 		if (cityGuild == "") then
-			e.self:SetNPCFactionID(0); --peaceful if no guild owns
+            e.self:SetHostile(false);
+			--e.self:SetNPCFactionID(0); --peaceful if no guild owns
 			set_base_stats(e);
 			local oggokGuards = "oggokGuards";
 			local oggokGuardsQuantity = tonumber(eq.get_data(oggokGuards));
@@ -32,8 +34,9 @@ function event_spawn(e)
 		else
 			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 			if (eq.get_data(cityFactionStatus) == "hostile") then
-				e.self:SetNPCFactionID(68); --hostile
-				local myFactionID = e.self:GetNPCFactionID();
+				e.self:SetHostile(true);
+                --e.self:SetNPCFactionID(68); --hostile
+				--local myFactionID = e.self:GetNPCFactionID();
 				set_base_stats(e);
 				e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
 				local oggokGuards = "oggokGuards";
@@ -44,7 +47,8 @@ function event_spawn(e)
 					end
 				end
 			else
-				e.self:SetNPCFactionID(0); --peaceful
+                e.self:SetHostile(false);
+				--e.self:SetNPCFactionID(0); --peaceful
 				local myFactionID = e.self:GetNPCFactionID();
 				set_base_stats(e);
 				e.self:TempName(npcName.."_<"..cityGuildName..">"); --add guild name to npc name
@@ -213,8 +217,9 @@ function try_collect_from_vault(e)
 end
 
 function calculate_vault(e)
-	local bank = "oggokBank"
+    local bank = "oggokBank" 
 	local bankIncome = "oggokBankIncomeTime"
+
     
     -- Retrieve the last income time
     local timefrom = eq.get_data(bankIncome)
@@ -263,9 +268,14 @@ function calculate_vault(e)
 
         -- If there's already an amount in the bank, calculate new amount
         if bankamount ~= "" then
-            -- Ensure we don't exceed 20,000 platinum
-            if tonumber(bankamount) < 20000 then
+            -- Ensure we don't exceed 10,000 platinum
+            if tonumber(bankamount) < 10000 then
                 eq.set_data(bank, tostring(tonumber(bankamount) + incomeaccrued))
+				local bankamountfinal = eq.get_data(bank)
+				e.self:Say("Sir, the bank currently has: " .. bankamountfinal .. " platinum.")
+			else
+				local bankamountfinal = eq.get_data(bank)
+				e.self:Say("Sir, the bank currently has: " .. bankamountfinal .. " platinum.")
             end
         else
             -- If no bank amount is set, initialize it with the accrued income
@@ -280,7 +290,6 @@ function calculate_vault(e)
         eq.set_data(bank, tostring(0))
     end
 end
-
 
 
 function reset_guard_hostile(e)
@@ -534,6 +543,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "35") then
@@ -559,6 +569,7 @@ function set_base_stats(e)
 		e.self:Shout("max hit "..max_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "50") then
@@ -581,6 +592,7 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	end

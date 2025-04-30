@@ -3,11 +3,27 @@ local SpawnY = 0;
 local SpawnZ = 0;
 local SpawnH = 0;
 
+local spelldrops = {
+    26954, --Tuyen's Chant of Poison        Brd Spell
+    30444, --Celestial Healing              Clr Spell
+    30437, --Ro's Fiery Sundering           Dru Spell
+    30474, --Boon of the Garou              Enc Spell
+    30403, --Elemental Maelstrom            Mag Spell
+    7695, --Force of Nature                 Rng Spell
+    15732, --Ice Comet                      Wiz Spell
+    7674, --Scream of Death                 SK Spell
+    15754, --Cannibalize II                 Shm Spell
+    15693, --Divine Might                   Pal Spell
+    26958, --Torbas Poison Blast            Nec Spell
+}
+
 function event_spawn(e)
 	SpawnX = e.self:GetX();
 	SpawnY = e.self:GetY();
 	SpawnZ = e.self:GetZ();
 	SpawnH = e.self:GetHeading();
+	local item = spelldrops[math.random(1, #spelldrops)]
+    e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
 end
 
 function event_combat(e)

@@ -12,19 +12,10 @@ local spelldrops = {
     7684, --Divine Vigor                    Pal Spell
 }
 
-local gemdrops = {
-    10037 --Diamond
-}
-
-local fabled = {
-    32678 --Fabled Journeyman Boots
-}
-
 function event_spawn(e)
-    local item = spelldrops[math.random(1, #spelldrops)]
-    local item2 = gemdrops[math.random(1, #gemdrops)]
-    local item3 = fabled[math.random(1, #fabled)]
-    e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
-    e.self:AddItem(item2, 0, false) --AddItem(int item_id, int charges, bool equip)
-    e.self:AddItem(item3, 0, false) --AddItem(int item_id, int charges, bool equip)
+    local roll = math.random(1,100)
+    if roll < 34 then
+        local item = spelldrops[math.random(1, #spelldrops)]
+        e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
+    end 
 end

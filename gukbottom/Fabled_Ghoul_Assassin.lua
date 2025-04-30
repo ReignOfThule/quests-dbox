@@ -1,19 +1,19 @@
 local spelldrops = {
-    7692, --Hawk Eye                        Rng spell
-    7602, --Celestial Remedy                Clr spell
-    7652, --Garrison's Mighty Mana Shock    Wiz spell
-    15177, --Color Shift                    Enc spell
-    7682, --Desist                          Pal spell
-    15199, --Harmshield                     Nec spell
-    32702, --Scorchbloom                    Dru spell
-    32703, --Stupor                         Shm spell
-    32704, --Flamecloak                     Mag spell
-    32705, --Blackblood Bargain             Shd spell
+    7703, --Amplification                   Brd Spell
+    29011, --Celestial Health               Clr Spell
+    30439, --Fury of Air                    Dru Spell
+    26972, --Entrancing Lights              Enc Spell
+    19503, --Expedience                     Mag Spell
+    30461, --Call of Sky                    Rng Spell
+    19434, --Harvest                        Wiz Spell
+    19506, --Strengthen Death               Sk Spell
+    30427, --Shock of the Tainted           Nec Spell
+    30415, --Torbas' Acid Blast             Shm Spell
+    7684, --Divine Vigor                    Pal Spell
 }
 
 local gemdrops = {
     10037, --Diamond
-    22503 --Blue Diamond
 }
 
 local fabled = {

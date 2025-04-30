@@ -21,16 +21,20 @@ function event_say(e)
 		e.self:Say("Hello "..charName.. " I can ".. eq.say_link("teleport") .. " you to a city you own or "..eq.say_link("gate to bind"));
     elseif(e.message:findi("teleport")) then
         if (qeynosGuild == tostring(guild_id)) then
+            e.other:MovePC(1, -168, 115, 3, 166);
             e.self:Say("teleporting you to Qeynos!");
         end
         if (felwitheGuild == tostring(guild_id)) then
             e.self:Say("teleporting you to Felwithe!");
+            e.other:MovePC(61, 94, -25, 3.80, 412);
         end
         if (oggokGuild == tostring(guild_id)) then
             e.self:Say("teleporting you to Oggok!");
+            e.other:MovePC(49, -99, -345, 3.80, 138);
         end
         if (erudinGuild == tostring(guild_id)) then
             e.self:Say("teleporting you to Erudin!");
+            e.other:MovePC(24, -338, 75, 23, 0);
         end            
 	elseif(e.message:findi("gate to bind")) then
         local player = eq.get_entity_list():GetMob(saved_char_id);

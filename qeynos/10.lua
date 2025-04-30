@@ -116,8 +116,8 @@ function calculate_vault(e)
 
         -- If there's already an amount in the bank, calculate new amount
         if bankamount ~= "" then
-            -- Ensure we don't exceed 20,000 platinum
-            if tonumber(bankamount) < 20000 then
+            -- Ensure we don't exceed 10,000 platinum
+            if tonumber(bankamount) < 10000 then
                 eq.set_data(bank, tostring(tonumber(bankamount) + incomeaccrued))
             end
         else
