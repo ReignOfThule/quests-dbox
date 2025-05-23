@@ -29,12 +29,15 @@ function event_signal(e)
                 if (qeynosGuardsFinalQuantity > 0) then
                     eq.world_emote(13, "[PvP News] The city of Qeynos is under attack!");
                     eq.zone_emote(5, "There are "..qeynosGuardsFinalQuantity.. " remaining guards in the city!");
+                    client:QuestReward(e.self,0,0,0,0,25190,0); -- PvP Ticket
+
                 elseif (qeynosGuardsFinalQuantity == 0) then
 
                     local guardsBucketKey = "qeynosGuards";
                     local qeynosGuards = eq.get_data(guardsBucketKey);
                     local qeynosBankAmount = eq.get_data(qeynosBank);
                     if eq.get_data(qeynosGuildName) ~= tostring(clientGuildName) then --City take over - cannot take over your own city
+                        client:QuestReward(e.self,0,0,0,0,25190,0); -- PvP Ticket
                         eq.set_data(qeynosGuildName, tostring(clientGuildName)); --set guild name
                         eq.set_data(qeynosGuild, tostring(clientGuildID)); --set guild ID
                         eq.set_data(guardsBucketKey, tostring(maxGuards)); --reset guard count to max
@@ -51,12 +54,15 @@ function event_signal(e)
                         eq.world_emote(13, "[PvP News] The city of Qeynos has been taken over by the nobles of <"..clientGuildName..">!");
                     elseif tostring(clientGuildName) == eq.get_data(felwitheGuildName) then --if you own a different city, you steal guild bank but don't initiate take over
                         client:AddMoneyToPP(0, 0, 0, tonumber(qeynosBankAmount), true); --client who got the killing blow receives entire bank amount
+                        client:QuestReward(e.self,0,0,0,0,25190,0); -- PvP Ticket
                         eq.world_emote(13, "[PvP News] "..clientName.. " has stolen the Qeynos bank!");
                     elseif tostring(clientGuildName) == eq.get_data(oggokGuildName) then --if you own a different city, you steal guild bank but don't initiate take over
                         client:AddMoneyToPP(0, 0, 0, tonumber(qeynosBankAmount), true); --client who got the killing blow receives entire bank amount
+                        client:QuestReward(e.self,0,0,0,0,25190,0); -- PvP Ticket
                         eq.world_emote(13, "[PvP News] "..clientName.. " has stolen the Qeynos bank!");
                     elseif tostring(clientGuildName) == eq.get_data(erudinGuildName) then --if you own a different city, you steal guild bank but don't initiate take over
                         client:AddMoneyToPP(0, 0, 0, tonumber(qeynosBankAmount), true); --client who got the killing blow receives entire bank amount
+                        client:QuestReward(e.self,0,0,0,0,25190,0); -- PvP Ticket
                         eq.world_emote(13, "[PvP News] "..clientName.. " has stolen the Qeynos bank!");
                     end
                 end
@@ -118,7 +124,11 @@ function calculate_vault(e)
         if bankamount ~= "" then
             -- Ensure we don't exceed 10,000 platinum
             if tonumber(bankamount) < 10000 then
-                eq.set_data(bank, tostring(tonumber(bankamount) + incomeaccrued))
+                if bankamount + incomeaccrued > 10000 then
+                    eq.set_data(bank, "10000")
+                else
+                    eq.set_data(bank, tostring(tonumber(bankamount) + incomeaccrued))
+                end
             end
         else
             -- If no bank amount is set, initialize it with the accrued income

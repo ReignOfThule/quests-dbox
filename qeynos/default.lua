@@ -577,17 +577,16 @@ function set_base_stats(e)
 	for i = 1, #SpecialAbilities do
         e.self:ModifyNPCStat("special_abilities", SpecialAbilities[i]);
     end
-
 	if (level == "20") then
-		local hp = "1150"; --+500 from normal
-		local ac = "70";
+		local hp = "650";
+		local ac = "40";
 		local str = "99";
 		local sta = "99";
-		local min_hit = "20"; --+10 from normal
-		local max_hit = "46";
+		local min_hit = "10"; 
+		local max_hit = "36";
 		local hp_regen = "3";
 		local attack_delay = "15";
-		local accuracy = "500";	
+		local accuracy = "250";	
 		e.self:ModifyNPCStat("aggro", "100");
 		e.self:ModifyNPCStat("assist", "50");	
 		e.self:ModifyNPCStat("max_hp", hp);
@@ -598,19 +597,40 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("min_hit", min_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
-		e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "30") then
-		local hp = "2000" --+2000 from normal
-		local ac = "150"
-		local str = "135"
-		local sta = "135"
-		local min_hit = "14" --+30 from normal
-		local max_hit = "68"
+		local hp = "1500";
+		local ac = "70";
+		local str = "99";
+		local sta = "99";
+		local min_hit = "20"; 
+		local max_hit = "56";
+		local hp_regen = "3";
+		local attack_delay = "15";
+		local accuracy = "250";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "35") then
+		local hp = "2000"
+		local ac = "100"
+		local str = "99"
+		local sta = "99"
+		local min_hit = "25"
+		local max_hit = "70"
 		local hp_regen = "5"
 		local attack_delay = "15";
-		local accuracy = "500";	
+		local accuracy = "250";	
 		e.self:ModifyNPCStat("aggro", "100");
 		e.self:ModifyNPCStat("assist", "50");	
 		e.self:ModifyNPCStat("max_hp", hp);
@@ -624,19 +644,18 @@ function set_base_stats(e)
 		e.self:Shout("max hit "..max_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
-		e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
-	elseif (level == "41") then
-		local hp = "4500" --+1000 from normal
-		local ac = "175"
-		local str = "150"
-		local sta = "150"
-		local min_hit = "22"
-		local max_hit = "101"
+	elseif (level == "40") then
+		local hp = "3500"
+		local ac = "100"
+		local str = "99"
+		local sta = "99"
+		local min_hit = "30"
+		local max_hit = "80"
 		local hp_regen = "5"
 		local attack_delay = "15";
-		local accuracy = "500";	
+		local accuracy = "250";	
 		e.self:ModifyNPCStat("aggro", "100");
 		e.self:ModifyNPCStat("assist", "50");	
 		e.self:ModifyNPCStat("max_hp", hp);
@@ -650,30 +669,6 @@ function set_base_stats(e)
 		e.self:Shout("max hit "..max_hit);
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
-        e.self:ModifyNPCStat("walkspeed", "10");
-		e.self:ModifyNPCStat("attack_delay", attack_delay);
-		e.self:ModifyNPCStat("accuracy", accuracy);
-	elseif (level == "50") then
-		local hp = "20120" --+5000 from normal
-		local ac = "190"
-		local str = "191"
-		local sta = "191"
-		local min_hit = "101" --+40 from normal
-		local max_hit = "175"
-		local hp_regen = "6"
-		local attack_delay = "15";
-		local accuracy = "500";	
-		e.self:ModifyNPCStat("aggro", "100");
-		e.self:ModifyNPCStat("assist", "50");	
-		e.self:ModifyNPCStat("max_hp", hp);
-		e.self:SetHP(tonumber(hp));
-		e.self:ModifyNPCStat("ac", ac);
-		e.self:ModifyNPCStat("str", str);
-		e.self:ModifyNPCStat("sta", sta);
-		e.self:ModifyNPCStat("min_hit", min_hit);
-		e.self:ModifyNPCStat("max_hit", max_hit);
-		e.self:ModifyNPCStat("hp_regen", hp_regen);
-		e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	end
