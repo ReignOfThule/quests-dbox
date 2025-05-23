@@ -28,6 +28,7 @@ function event_enter_zone(e)
 
 	if eq.get_data(initialSpells) == "" then
 		e.self:SummonItem(10184);
+		e.self:SummonItem(32601);
 		e.self:ScribeSpells(1, 1);
 		e.self:MaxSkills(false);
 		eq.set_data(charName.."ThuleCoin", "0");
@@ -57,6 +58,8 @@ function event_cast_begin(e)
 	local charID = e.self:CharacterID();
 	local clericResoRecast = eq.get_data(tostring(charID).."clericResoTimer");
 	local clericSymbRecast = eq.get_data(tostring(charID).."clericSymbTimer");
+	local purgeStoneRecast = eq.get_data(tostring(charID).."purgeStoneTimer");
+
 	
 	local maxLevelReached = "maxLevelReached"
 	local levelCap = eq.get_rule("Character:MaxLevel")
@@ -78,13 +81,30 @@ function event_cast_begin(e)
 		end
 	elseif e.spell == 3138 then --Blessing of the Resolute
 		if clericResoRecast ~= "" then
-			e.self:Message(13, "This spell is currently on a cooldown.");
 			e.self:Duck();
+			--end
+			e.self:Message(13, "This spell is currently on a cooldown.");
 		end
-	elseif e.spell == 3149 then --Blessing of Symbols
+	elseif e.spell == 3149 then -- Blessing of Symbols
 		if clericSymbRecast ~= "" then
-			e.self:Message(13, "This spell is currently on a cooldown.");
 			e.self:Duck();
+			--end
+			e.self:Message(13, "This spell is currently on a cooldown.");
+		end
+	elseif e.spell == 3950 then --Purge
+		if purgeStoneRecast ~= "" then
+			--local expire_time = eq.get_data_expires(tostring(charID).."purgeStoneTimer");
+			--local now = os.time();
+			--local timeRemaining = expire_time - now;
+
+			--if timeRemaining > 0 then
+			--	local minutes = math.floor(timeRiemaining / 60);
+			--	local seconds = timeRemaining % 60;
+			--	e.self:Message(13, string.format("This spell is currently on a cooldown. You can use it again in %d minute(s) and %d second(s).", minutes, seconds));
+
+			--e.self:Duck();
+			--end
+			e.self:Message(13, "This spell is currently on a cooldown.");
 		end
 	elseif e.spell == 3999 then --Maelin's Magical Concotion (XP Potion)
 		if eq.get_data(maxLevelReached) ~= "yes" then
@@ -121,7 +141,7 @@ end
 
 function event_cast(e)
 	local str = e.self:GetAA(2);
-	local sta = e.self:GetAA(7);
+	local staAA = e.self:GetAA(7);
 	local haste = e.self:GetAA(12);
 	local seeinvis = e.self:GetAA(17);
 	local clarity = e.self:GetAA(22);
@@ -139,6 +159,7 @@ function event_cast(e)
 	local charID = e.self:CharacterID();
 	local clericResoRecast = eq.get_data(tostring(charID).."clericResoTimer");
 	local clericSymbRecast = eq.get_data(tostring(charID).."clericSymbTimer");
+	local purgeStoneRecast = eq.get_data(tostring(charID).."purgeStoneTimer");
 
 	saved_char_id = charID;
 
@@ -166,6 +187,52 @@ function event_cast(e)
 				eq.self_cast(2524); --Spirit of Bih Li
 			end
 		end
+
+
+	elseif e.spell == 3950 then 
+		if purgeStoneRecast == "" then
+			eq.set_data(tostring(charID).."purgeStoneTimer", "onCooldown", "10M");
+			local debuffs_to_remove = {
+				242,  -- Snare
+				512,  -- Ensnare
+				2591, -- Tangling Weeds
+				344,  -- Clinging Darkness
+				355,  -- Engulfing Darkness
+				452,  -- Dooming Darkness
+				453,  -- Cascading Darkness
+				201,  -- Flash of Light
+				134,  -- Blinding Luminance
+				143,   -- Sunbeam
+				76, --Ensnaring Roots
+				77, --Engulfing Roots
+				133, --Paralyzing Earth
+				230, --Root
+				249, --Grasping Roots
+				490, -- Enveloping Roots
+				2748, --Strong Root
+				1608, --Entrapping Roots
+				1719, --Engorging Roots
+				2649, --Penetrating Roots
+				3192, --Earthen Roots
+				3447, --Savage Roots
+			}
+
+			for _, spell_id in ipairs(debuffs_to_remove) do
+				if e.self:FindBuff(spell_id) then
+					e.self:BuffFadeBySpellID(spell_id)
+				--cure blind if any of these spells. removing the detriment alone still results in blindness.
+				elseif spell_id == 201 then
+					eq.self_cast(212);
+				elseif spell_id == 134 then
+					eq.self_cast(212);
+				elseif spell_id == 143 then
+					eq.self_cast(212);
+				end
+			end
+		else
+			e.self:Message(13, "This spell is currently on a cooldown.");
+		end
+
 	elseif e.spell == 3138 then --blessing of the Resolute
 		if clericResoRecast == "" then
 			if charLevel < 20 then
@@ -339,38 +406,38 @@ function event_cast(e)
 		end
 	elseif e.spell == 3142 then --Blessing of Stamina
 		if charLevel < 20 then
-			if sta == 1 then
+			if staAA == 1 then
 				eq.self_cast(279); --Spirit of Bear
-			elseif sta > 1 then
+			elseif staAA > 1 then
 				eq.self_cast(279); --If above rank 1 at level 20, still cast Spirit of Bear
 			end
 		elseif charLevel < 30 then
 			if charLevel > 19 then
-				if sta == 1 then
+				if staAA == 1 then
 					eq.self_cast(279); --Spirit of Bear
-				elseif sta > 1 then 
+				elseif staAA > 1 then 
 					eq.self_cast(149); --If above rank 1 at level 21-30 cast Spirit of Ox
 				end
 			end
 		elseif charLevel < 40 then
 			if charLevel > 29 then
-				if sta == 1 then
+				if staAA == 1 then
 					eq.self_cast(279); --Spirit of Bear
-				elseif sta == 2 then
+				elseif staAA == 2 then
 					eq.self_cast(149); --Spirit of Ox
-				elseif sta > 2 then
+				elseif staAA > 2 then
 					eq.self_cast(161); --If above rank 2 at level 31-40 cast Health
 				end
 			end
 		elseif charLevel < 51 then
 			if charLevel > 39 then
-				if sta == 1 then
+				if staAA == 1 then
 					eq.self_cast(279); --Spirit of Bear
-				elseif sta == 2 then
+				elseif staAA == 2 then
 					eq.self_cast(149); --Spirit of Ox
-				elseif sta == 3 then
+				elseif staAA == 3 then
 					eq.self_cast(161); --Health
-				elseif sta > 3 then
+				elseif staAA > 3 then
 					eq.self_cast(158); --If above rank 3 at level 41-50 cast Stamina
 				end
 			end

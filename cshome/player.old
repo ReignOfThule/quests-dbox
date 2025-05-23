@@ -19,6 +19,12 @@ function event_enter_zone(e)
 	local charLevel = e.self:GetLevel();
 	local charID = e.self:CharacterID();
 	local initialSpells = tostring(charID).."initialspells"
+	local fixAAs = tostring(charID).."fixAAs"
+
+	local spellcast = e.other:GetAA(302);
+	local naturalhealing = e.other:GetAA(312);
+	local mentalclarity = e.other:GetAA(332);
+	local healingadept = e.other:GetAA(342);
 
 	--local character = e.self;
 	--if (character.valid and character:IsClient()) then
@@ -28,6 +34,25 @@ function event_enter_zone(e)
 			--client:MaxSkills(false);
 	--	end
 	--end
+
+	if eq.get_data(fixAAs) == "" then
+		if spellcast == 1 then
+			e.other:IncrementAA(86);
+			e.other:Message(2, "You gained a rank in Spell Casting Reinforcement!");
+		if spellcast == 2 then
+			e.other:IncrementAA(86);
+			e.other:Message(2, "You gained a rank in Spell Casting Reinforcement!");
+			e.other:IncrementAA(86);
+			e.other:Message(2, "You gained a rank in Spell Casting Reinforcement!");
+		if spellcast == 3 then
+			e.other:IncrementAA(86);
+			e.other:Message(2, "You gained a rank in Spell Casting Reinforcement!");
+			e.other:IncrementAA(86);
+			e.other:Message(2,	 "You gained a rank in Spell Casting Reinforcement!");
+			e.other:IncrementAA(86);
+			e.other:Message(2, "You gained a rank in Spell Casting Reinforcement!");
+		end
+	
 
 	if eq.get_data(initialSpells) == "" then
 		e.self:SummonItem(10184);

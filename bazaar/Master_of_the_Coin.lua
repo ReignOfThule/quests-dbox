@@ -18,7 +18,7 @@ local rare = {
     1141, --Red Resistance Stone
     1152, --Green Resistance Stone
     1135, --Mask of Tinkering
-    44518, --Ancient Cobalt Bracer (all shrink)
+    32706, --Ancient Cobalt Bracer (all shrink)
     14727 --Locket of Escape
 }
 

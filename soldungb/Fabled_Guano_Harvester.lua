@@ -17,8 +17,7 @@ local gemdrops = {
 }
 
 local fabled = {
-    32743, --Fabled Gatorscale Sleeves
-    32744 --Fabled Gatorscale Leggings
+    32564 --Fabled Cloak of Shadows
 }
 
 function event_spawn(e)
@@ -28,8 +27,4 @@ function event_spawn(e)
     e.self:AddItem(item, 0, false) --AddItem(int item_id, int charges, bool equip)
     e.self:AddItem(item2, 0, false) --AddItem(int item_id, int charges, bool equip)
     e.self:AddItem(item3, 0, false) --AddItem(int item_id, int charges, bool equip)
-end
-
-function event_death_complete(e)
-	eq.signal(65150,1); -- NPC: croc_trigger
 end

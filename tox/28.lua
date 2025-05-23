@@ -12,7 +12,7 @@ function event_signal(e)
     local erudinBank = "erudinBank";
 	local erudinGuardsQuantity = tonumber(eq.get_data(erudinGuards));
     local client = eq.get_entity_list():GetClientByID(e.signal);
-	local maxGuards = 39;
+	local maxGuards = 30;
     local erudinRepop = "erudinRepop";
     local erudinPalaceRepop = "erudinPalaceRepop";
     local toxRepop = "toxRepop";

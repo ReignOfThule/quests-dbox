@@ -30,116 +30,17 @@ function event_say(e)
 	local mastercraft = e.other:GetAA(74);
 	local familiar = e.other:GetAA(412);
 	local purge = e.other:GetAA(292);
-	
 	local spellcast = e.other:GetAA(302);
-	local spellca = e.other:GetAA(86);
-
 	local naturalhealing = e.other:GetAA(312);
-	local naturalheal = e.other:GetAA(110);
 	--local planardura = e.other:GetAA(322);
 	local mentalclarity = e.other:GetAA(332);
-	local mentalcla = e.other:GetAA(89);
-
 	local healingadept = e.other:GetAA(342);
-	local healingade = e.other:GetAA(77);
-
 	local divineres = e.other:GetAA(352);
 	local classspecial = e.other:GetAA(362);
 
 	if(e.message:findi("hail")) then
 		e.other:Message(13, "Dead again? I can "..eq.say_link("summon corpses").. " here after they decay. If you'd like to train in "..eq.say_link("Alternate Advancements").. " I can also help");
-		
-		--AA Fix
-		if naturalhealing == 1 then
-			if naturalheal == 0 then
-				e.other:IncrementAA(110);
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-			end
-		elseif naturalhealing == 2 then
-			if naturalheal < 2 then
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-				e.other:IncrementAA(110);
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-				e.other:IncrementAA(110);
-			end
-		elseif naturalhealing == 3 then
-			if naturalheal < 3 then
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-				e.other:IncrementAA(110);
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-				e.other:IncrementAA(110);
-				e.other:Message(13, "You gained a rank in Natural Healing!");
-				e.other:IncrementAA(110);
-			end
-		elseif mentalclarity == 1 then
-			if mentalcla == 0 then
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-			end
-		elseif mentalclarity == 2 then
-			if mentalcla < 2 then
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-			end
-		elseif mentalclarity == 3 then
-			if mentalcla < 3 then
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-				e.other:IncrementAA(89);
-				e.other:Message(13, "You gained a rank in Mental Clarity");
-			end
-		elseif healingadept == 1 then
-			if healingade == 0 then
-				e.other:IncrementAA(77);			
-				e.other:Message(13, "You gained a rank in Healing Adept");
-			end
-		elseif healingadept == 2 then
-			if healingade < 2 then
-				e.other:IncrementAA(77);
-				e.other:Message(13, "You gained a rank in Healing Adept");
-				e.other:IncrementAA(77);
-				e.other:Message(13, "You gained a rank in Healing Adept");
-			end
-		elseif healingadept == 3 then
-			if healingade < 3 then
-				e.other:IncrementAA(77);
-				e.other:Message(13, "You gained a rank in Healing Adept");
-				e.other:IncrementAA(77);
-				e.other:Message(13, "You gained a rank in Healing Adept");
-				e.other:IncrementAA(77);
-				e.other:Message(13, "You gained a rank in Healing Adept");
-			end
-		elseif spellcast == 1 then
-			if spellca == 0 then
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-			end
-		elseif spellcast == 2 then
-			if spellca < 2 then
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-			end			
-		elseif spellcast == 3 then
-			if spellca < 3 then
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-				e.other:IncrementAA(86);
-				e.other:Message(13, "You gained a rank in Spell Casting Reinforcement");
-			end
-		end	
-
-
-
 	elseif(e.message:findi("summon corpses")) then
-		--eq.summon_all_player_corpses(charID, x, y, z, h); uncomment for events/endless summon
 		corpse = eq.get_player_burried_corpse_count(charID);
 		if corpse > 0 then
 			e.other:Message(13, "Here is your corpse. Some advice? Perhaps die less.");
@@ -523,16 +424,27 @@ function event_say(e)
 					e.other:IncrementAA(162); --Gather Mana
 					e.other:Message(2, "You gained a new ability! Gather Mana! Create a hotkey with /alt activate 57 to use it.");
 				elseif tostring(class) == "13" then --Magician
-					--if level < 21 then
-					e.other:IncrementAA(168); --Fire Elemental Form
-					e.other:Message(2, "You gained a new ability! Fire Elemental Form! Create a hotkey with /alt activate 61 to use it.");
-					e.other:IncrementAA(168); --Fire Elemental Form
+					if level < 21 then
+						e.other:IncrementAA(168); --Fire Elemental Form
+						e.other:Message(2, "You gained a new ability! Fire Elemental Form! Create a hotkey with /alt activate 61 to use it.");
+					elseif level < 36 then
+						if level > 20 then
+							e.other:IncrementAA(168); --Fire Elemental Form
+							e.other:Message(2, "You gained a new ability! Fire Elemental Form! Create a hotkey with /alt activate 61 to use it.");
+							e.other:IncrementAA(168); --Fire Elemental Form
+						end
+					elseif level < 51 then
+						if level > 35 then
+							e.other:IncrementAA(168); --Fire Elemental Form
+							e.other:Message(2, "You gained a new ability! Fire Elemental Form! Create a hotkey with /alt activate 61 to use it.");
+							e.other:IncrementAA(168); --Fire Elemental Form
+							e.other:Message(2, "You gained a new ability! Fire Elemental Form! Create a hotkey with /alt activate 61 to use it.");
+							e.other:IncrementAA(168); --Fire Elemental Form
+						end
+					end	
 				elseif tostring(class) == "14" then --Enchanter
 					e.other:IncrementAA(145); --Dire Charm
 					e.other:Message(2, "You gained a new ability! Dire Charm! Create a hotkey with /alt activate 46 to use it.");
-				elseif tostring(class) == "15" then --Beastlord
-					e.other:IncrementAA(551); --Bestial Frenzy
-					e.other:Message(2, "You gained a new ability! Bestial Frenzy!");
 				end
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");
@@ -860,8 +772,8 @@ function event_say(e)
 					e.other:IncrementAA(564); --Ferocity
 					e.other:Message(2, "You gained a new ability! Ferocity!");
 				elseif tostring(class) == "8" then --Bard
-					e.other:IncrementAA(556); --Harmonious Attack
-					e.other:Message(2, "You gained a new ability! Harmonious Attack!");
+					e.other:SummonItem(32749); --Song: Selo`s Desperate Chorus
+					e.other:Message(2, "You gained a new ability! Selo`s Desperate Chorus!");
 				elseif tostring(class) == "9" then --Rogue
 					e.other:IncrementAA(564); --Ferocity
 					e.other:Message(2, "You gained a new ability! Ferocity!");
@@ -869,8 +781,8 @@ function event_say(e)
 					e.other:IncrementAA(153); --Rabid Bear
 					e.other:Message(2, "You gained a new ability! Rabid Bear! Create a hotkey with /alt activate 50 to use it.");
 				elseif tostring(class) == "11" then --Necromancer
-					e.other:IncrementAA(167); --Frenzied Burnout
-					e.other:Message(2, "You gained a new ability! Frenzied Burnout! Create a hotkey with /alt activate 60 to use it.");	
+					e.other:IncrementAA(185); --Fearstorm
+					e.other:Message(2, "You gained a new ability! Fearstorm! Create a hotkey with /alt activate 70 to use it.");
 				elseif tostring(class) == "12" then --Wizard
 					e.other:IncrementAA(274); --Strong Root
 					e.other:Message(2, "You gained a new ability! Strong Root! Create a hotkey with /alt activate 117 to use it.");
@@ -880,9 +792,6 @@ function event_say(e)
 				elseif tostring(class) == "14" then --Enchanter
 					e.other:IncrementAA(517); --Eldritch Rune
 					e.other:Message(2, "You gained a new ability! Eldritch Rune! Create a hotkey with /alt activate 173 to use it.");
-				elseif tostring(class) == "15" then --Beastlord
-					e.other:IncrementAA(163); --Mend Companion
-					e.other:Message(2, "You gained a new ability! Mend Companion! Create a hotkey with /alt activate 58 to use it.");
 				end
 			else
 				e.other:Message(2, "Not enough AA's available for this purchase!");

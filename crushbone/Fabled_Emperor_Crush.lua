@@ -1,5 +1,4 @@
 local spelldrops = {
-    1287, --Cassindras Chant of Clarity     Brd spell
     7692, --Hawk Eye                        Rng spell
     7602, --Celestial Remedy                Clr spell
     7652, --Garrison's Mighty Mana Shock    Wiz spell

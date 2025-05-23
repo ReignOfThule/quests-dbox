@@ -1,7 +1,26 @@
+local invul = false;
 
+local SafeHours = {
+    [2] = true,
+    [3] = true,
+    [4] = true,
+    [5] = true,
+    [6] = true,
+    [7] = true,
+    [8] = true,
+    [9] = true,
+    [10] = true,
+    [11] = true,
+    [12] = true,
+    [13] = true
+}
+
+local SpecialAbilities = { "1,0","14,1","16,1","17,1","31,1","32,1,300"}
 
 function event_spawn(e)
 	eq.set_proximity(e.self:GetX() - 15, e.self:GetX() + 15, e.self:GetY() - 15, e.self:GetY() + 15, e.self:GetZ() -5, e.self:GetZ() +5);
+
+    eq.set_timer("TimeCheck",10000);
 
 	local npcName = e.self:GetCleanName()
 	local cityOwnership = "felwitheGuild";
@@ -35,6 +54,7 @@ function event_spawn(e)
 			e.self:SetGuild(tonumber(cityGuild)); --set guild to player
 			if (eq.get_data(cityFactionStatus) == "hostile") then
 				e.self:SetHostile(true);
+                eq.set_ffa(false);
 				--e.self:SetNPCFactionID(68); --hostile
 				local myFactionID = e.self:GetNPCFactionID();
 				set_base_stats(e);
@@ -67,6 +87,7 @@ end
 function event_death_complete(e)
     if e.self:GetRace() == 106 then
 		eq.signal(16, e.killer:GetID());
+        eq.set_ffa(true);
     end
 end
 
@@ -609,7 +630,11 @@ function set_base_stats(e)
 	local levelAdjustment = tonumber(level) + 2;
 	local npcClass = e.self:GetClass();
 	
-	e.self:SetLevel(levelAdjustment); --Add +2 to max level		
+	e.self:SetLevel(levelAdjustment); --Add +2 to max level	
+    
+    for i = 1, #SpecialAbilities do
+        e.self:ModifyNPCStat("special_abilities", SpecialAbilities[i]);
+    end
 
 	if (level == "20") then
 		local hp = "1150"; --+500 from normal
@@ -632,16 +657,15 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
         e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
-        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
-	elseif (level == "35") then
-		local hp = "5250" --+2000 from normal
+	elseif (level == "30") then
+		local hp = "2000" --+2000 from normal
 		local ac = "150"
 		local str = "135"
 		local sta = "135"
-		local min_hit = "55" --+30 from normal
-		local max_hit = "101"
+		local min_hit = "14" --+30 from normal
+		local max_hit = "68"
 		local hp_regen = "5"
 		local attack_delay = "15";
 		local accuracy = "500";	
@@ -659,7 +683,32 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
         e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
-        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
+		e.self:ModifyNPCStat("attack_delay", attack_delay);
+		e.self:ModifyNPCStat("accuracy", accuracy);
+	elseif (level == "41") then
+		local hp = "4500" --+1000 from normal
+		local ac = "175"
+		local str = "150"
+		local sta = "150"
+		local min_hit = "22"
+		local max_hit = "101"
+		local hp_regen = "5"
+		local attack_delay = "15";
+		local accuracy = "500";	
+		e.self:ModifyNPCStat("aggro", "100");
+		e.self:ModifyNPCStat("assist", "50");	
+		e.self:ModifyNPCStat("max_hp", hp);
+		e.self:SetHP(tonumber(hp));
+		e.self:Shout("hp "..hp);
+		e.self:ModifyNPCStat("ac", ac);
+		e.self:ModifyNPCStat("str", str);
+		e.self:ModifyNPCStat("sta", sta);
+		e.self:ModifyNPCStat("min_hit", min_hit);
+		e.self:Shout("min hit "..min_hit);
+		e.self:Shout("max hit "..max_hit);
+		e.self:ModifyNPCStat("max_hit", max_hit);
+		e.self:ModifyNPCStat("hp_regen", hp_regen);
+        e.self:ModifyNPCStat("walkspeed", "10");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	elseif (level == "50") then
@@ -683,8 +732,55 @@ function set_base_stats(e)
 		e.self:ModifyNPCStat("max_hit", max_hit);
 		e.self:ModifyNPCStat("hp_regen", hp_regen);
         e.self:ModifyNPCStat("combat_hp_regen", hp_regen);
-        e.self:ModifyNPCStat("special_abilities", "1,1,9000,100,14,1");
 		e.self:ModifyNPCStat("attack_delay", attack_delay);
 		e.self:ModifyNPCStat("accuracy", accuracy);
 	end
+end
+
+function event_timer(e)
+	local time = GetCurrentTime();
+	if(e.timer == "TimeCheck") then
+        if (SafeHours[time] and invul == false) then
+            invul = true;
+            e.self:ModifyNPCStat("special_abilities", "19,1")
+            e.self:ModifyNPCStat("special_abilities", "20,1")
+        elseif (SafeHours[time] == nil and invul == true) then
+            invul = false;
+            e.self:ModifyNPCStat("special_abilities", "19,0")
+            e.self:ModifyNPCStat("special_abilities", "20,0")
+        end
+	end
+end
+
+function GetCurrentTime()
+    -- Get the current Unix timestamp
+    local now = os.date("%c")
+
+    -- Adjust the pattern to match the format: "Tue Mar  4 22:24:40 2025"
+    local pattern = "(%a+)%s+(%a+)%s+(%d+)%s+(%d+):(%d+):(%d+)%s+(%d+)"
+    local _, month, day, hour, min, sec, year = now:match(pattern)
+
+    -- Convert month name to number
+    local months = {
+        Jan = 1, Feb = 2, Mar = 3, Apr = 4, May = 5, Jun = 6,
+        Jul = 7, Aug = 8, Sep = 9, Oct = 10, Nov = 11, Dec = 12
+    }
+
+    -- Build the timeTable
+    local timeTable = {
+        year = tonumber(year),
+        month = months[month],
+        day = tonumber(day),
+        hour = tonumber(hour),
+        min = tonumber(min),
+        sec = tonumber(sec)
+    }
+
+    -- Debugging: Print the timeTable
+    --print("Time Table: ", timeTable.year, timeTable.month, timeTable.day, timeTable.hour, timeTable.min, timeTable.sec)
+
+
+
+    --e.self:Say("The hour is:" ..timeTable.hour);
+    return timeTable.hour;
 end

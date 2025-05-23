@@ -4,7 +4,7 @@
 function event_say(e)
 	if(e.other:GetFactionValue(e.self) >= 0) then
 		if(e.message:findi("hail")) then
-			e.self:Say("I am Ostorm of the Temple of Solusek Ro, guardian of the sacred crystal of Kintaz.  Be wary and keep your distance, lest the proximity of the crystal [steal] your [memories].");
+			e.self:Say("I am Ostorm of the Temple of Solusek Ro, guardian of the sacred crystal of Kintaz. I can "..eq.say_link("reset").." your skills. Be wary and keep your distance, lest the proximity of the crystal [steal] your [memories].");
 		elseif(e.message:findi("steal")) then
 			e.self:Say("It is the nature of the crystal of Kintaz to steal the memories of those around it. Only I am safe, and then only because of the strong wardings placed on me by Solusek Ro himself. Are you interested in [losing] any [memories]?");
 		elseif(e.message:findi("losing")) then
@@ -13,6 +13,10 @@ function event_say(e)
 			e.self:Say("Be warned that once exposed to the crystal, I can not reverse the effects. If you desire exposure, fetch me a ruby.");
 		elseif(e.message:findi("gold")) then
 			e.self:Say("You do not remember?  You promised me fifty gold coins for allowing you to be exposed to the sacred crystal of Kintaz.");
+		elseif(e.message:findi("reset")) then
+			for skill=43,47,1 do
+				e.other:SetSkill(skill,49);
+			end
 		end
 	else
 		e.self:Say(eq.ChooseRandom("I didn't know Slime could speak common.  Go back to the sewer before I lose my temper.","Is that your BREATH, or did something die in here?  Now go away!","I wonder how much I could get for the tongue of a blithering fool?  Leave before I decide to find out for myself.","Oh look..a talking lump of refuse..how novel!"));
